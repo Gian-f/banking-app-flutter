@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 class CreditCard {
-  final String cardType;
+  final CardType cardType;
   final String cardNumber;
   final String cardName;
   final double balance;
@@ -15,3 +15,5 @@ class CreditCard {
     required this.color,
   });
 }
+
+enum CardType { VISA, MASTERCARD, ADD_CARD }

@@ -41,6 +41,7 @@ class MyTextFieldComponent extends StatefulWidget {
   final String labelValue;
   final IconData iconData;
   final Function(String) onTextChanged;
+  final String? Function(String?) validator;
   final bool? errorStatus;
 
   const MyTextFieldComponent(
@@ -48,6 +49,7 @@ class MyTextFieldComponent extends StatefulWidget {
       required this.labelValue,
       required this.iconData,
       required this.onTextChanged,
+      required this.validator,
       this.errorStatus = false});
 
   @override
@@ -75,7 +77,7 @@ class _MyTextFieldComponentState extends State<MyTextFieldComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: _controller,
       decoration: InputDecoration(
         labelText: widget.labelValue,
@@ -93,16 +95,7 @@ class _MyTextFieldComponentState extends State<MyTextFieldComponent> {
         ),
         contentPadding: const EdgeInsets.all(10),
       ),
-      onChanged: (value) {
-        setState(() {
-          _isFocused = true;
-        });
-      },
-      onSubmitted: (value) {
-        setState(() {
-          _isFocused = false;
-        });
-      },
+      validator: widget.validator,
     );
   }
 }
@@ -111,6 +104,7 @@ class PasswordTextFieldComponent extends StatefulWidget {
   final String labelValue;
   final IconData iconData;
   final Function(String) onTextSelected;
+  final String? Function(String?) validator;
   final bool? errorStatus;
 
   const PasswordTextFieldComponent(
@@ -118,6 +112,7 @@ class PasswordTextFieldComponent extends StatefulWidget {
       required this.labelValue,
       required this.iconData,
       required this.onTextSelected,
+      required this.validator,
       this.errorStatus = false})
       : super(key: key);
 
@@ -148,7 +143,7 @@ class _PasswordTextFieldComponentState
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: _controller,
       decoration: InputDecoration(
         labelText: widget.labelValue,
@@ -177,9 +172,7 @@ class _PasswordTextFieldComponentState
         contentPadding: const EdgeInsets.all(10),
       ),
       obscureText: !_passwordVisible,
-      onChanged: (value) {
-        setState(() {});
-      },
+      validator: widget.validator,
     );
   }
 }
@@ -234,7 +227,7 @@ class ButtonComponent extends StatelessWidget {
   final bool isEnabled;
   final bool isLoading;
 
-  ButtonComponent({
+  const ButtonComponent({
     super.key,
     required this.value,
     required this.onButtonClicked,
@@ -247,7 +240,7 @@ class ButtonComponent extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(15),
       onTap: isEnabled ? onButtonClicked as void Function()? : null,
-      child: Container(
+      child: Ink(
         width: double.infinity,
         height: 50,
         decoration: BoxDecoration(
@@ -261,9 +254,13 @@ class ButtonComponent extends StatelessWidget {
         ),
         child: Center(
           child: isLoading
-              ? const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ? const SizedBox(
+                  height: 20.0,
+                  width: 20.0,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
                 )
               : Text(
                   value,

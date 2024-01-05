@@ -1,59 +1,55 @@
-import 'dart:async';
+import 'package:banking_app/domain/repository/auth_repository.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../data/remote/dto/request/login_request.dart';
 import '../../ui/screens/auth/login/login_state.dart';
 
 class LoginController {
-  final _loginStateController = StreamController<bool>();
-  Stream<bool> get loginError => _loginStateController.stream;
+  final AuthRepository _authRepository;
 
-  final _passwordStateController = StreamController<bool>();
-  Stream<bool> get passwordError => _passwordStateController.stream;
+  LoginController(this._authRepository);
 
-  final _loginInProgressController = StreamController<bool>();
-  Stream<bool> get loginInProgress => _loginInProgressController.stream;
+  final storage = const FlutterSecureStorage(
+      aOptions: AndroidOptions(
+    encryptedSharedPreferences: true,
+  ));
 
-  final _loginUIStateController = StreamController<LoginUIState>();
-  Stream<LoginUIState> get loginUIState => _loginUIStateController.stream;
+  String email = "";
+  String password = "";
 
-  void onEvent(LoginUIEvent event) {
+  Future<bool> onEvent(LoginUIEvent event) async {
     switch (event.runtimeType) {
       case EmailChanged:
-        _handleEmailChanged(event as EmailChanged);
+        email = (event as EmailChanged).email;
         break;
       case PasswordChanged:
-        _handlePasswordChanged(event as PasswordChanged);
+        password = (event as PasswordChanged).password;
         break;
       case LoginButtonClicked:
-        _handleLoginButtonClicked();
-        break;
+        return await _login(email, password);
       default:
         throw UnsupportedError('Unsupported event: $event');
     }
+    return false;
   }
 
-  void _handleEmailChanged(EmailChanged event) {
-    _loginUIStateController.add(LoginUIState(login: event.email));
+  Future<bool> _login(String? email, String? password) async {
+    if (email == null || password == null) {
+      throw ArgumentError('Email and password must not be null');
+    }
+
+    final request = LoginRequest(
+      email: email,
+      password: password,
+    );
+    try {
+      await _authRepository.login(request);
+      String? token = await storage.read(key: 'access_token');
+      print(token);
+      return true;
+    } catch (e) {
+      print('Login error: $e');
+      throw Exception('Login error: $e');
+    }
   }
-
-  void _handlePasswordChanged(PasswordChanged event) {
-    _loginUIStateController.add(LoginUIState(password: event.password));
-  }
-
-  void _handleLoginButtonClicked() {
-    _loginInProgressController.add(true);
-  }
-
-  void dispose() {
-    _loginStateController.close();
-    _passwordStateController.close();
-    _loginInProgressController.close();
-    _loginUIStateController.close();
-  }
-}
-
-class LoginUIState {
-  final String login;
-  final String password;
-
-  LoginUIState({this.login = '', this.password = ''});
 }

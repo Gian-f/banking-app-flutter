@@ -12,7 +12,7 @@ Material customIconButton(
     child: InkWell(
       borderRadius: BorderRadius.circular(borderRadius),
       onTap: onClick,
-      child: Container(
+      child: Ink(
         padding: const EdgeInsets.all(9),
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surfaceVariant,

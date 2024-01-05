@@ -6,28 +6,28 @@ import '../../../../ui/theme/colors.dart';
 
 List<CreditCard> creditCards = [
   CreditCard(
-    cardType: "VISA",
+    cardType: CardType.VISA,
     cardNumber: "3664 7865 3786 3976",
     cardName: "Business",
     balance: 456.467,
     color: [PurpleStart, PurpleEnd],
   ),
   CreditCard(
-    cardType: "VISA",
+    cardType: CardType.MASTERCARD,
     cardNumber: "3664 7865 3786 3976",
     cardName: "Business",
     balance: 456.467,
     color: [BlueStart, BlueEnd],
   ),
   CreditCard(
-    cardType: "VISA",
+    cardType: CardType.MASTERCARD,
     cardNumber: "3664 7865 3786 3976",
     cardName: "Business",
     balance: 456.467,
     color: [GreenStart, GreenEnd],
   ),
   CreditCard(
-    cardType: "ADD_CARD",
+    cardType: CardType.ADD_CARD,
     cardNumber: "",
     cardName: "Adicionar",
     balance: 0,
@@ -49,7 +49,7 @@ class CardsSection extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               itemCount: creditCards.length,
               itemBuilder: (context, index) {
-                if (creditCards[index].cardType == "ADD_CARD") {
+                if (creditCards[index].cardType == CardType.ADD_CARD) {
                   return Padding(
                     padding:
                         EdgeInsets.only(left: index == 0 ? 16 : 0, right: 16),
@@ -84,7 +84,7 @@ class CardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Ink(
       width: 250,
       height: 160,
       decoration: BoxDecoration(
@@ -101,7 +101,7 @@ class CardItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Image.asset(
-              card.cardType == "VISA"
+              card.cardType == CardType.VISA
                   ? 'assets/ic_visa.png'
                   : 'assets/ic_mastercard.png',
               width: 60),
@@ -127,7 +127,7 @@ class CardItem extends StatelessWidget {
 }
 
 Widget _buildAddCardButton() {
-  return Container(
+  return Ink(
     width: 250,
     height: 160,
     decoration: BoxDecoration(

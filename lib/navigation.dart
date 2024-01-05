@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
-void navigate(BuildContext context, Widget page) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+Future<void> navigate(BuildContext context, String routeName,
+    {Object? arguments}) async {
+  await Navigator.pushNamed(context, routeName, arguments: arguments);
+}
+
+Future<void> navigateFinish(BuildContext context, String routeName,
+    {Object? arguments}) async {
+  await Navigator.pushReplacementNamed(context, routeName,
+      arguments: arguments);
 }

@@ -1,6 +1,5 @@
 import 'package:banking_app/domain/controller/signup_controller.dart';
 import 'package:banking_app/navigation.dart';
-import 'package:banking_app/ui/screens/auth/login/login_screen.dart';
 import 'package:banking_app/ui/screens/auth/signup/sign_up_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,6 +36,7 @@ class SignUpScreen extends StatelessWidget {
                   },
                   errorStatus:
                       signUpController.registrationUIState.firstNameError,
+                  validator: (String) {},
                 ),
                 const SizedBox(height: 20),
                 MyTextFieldComponent(
@@ -46,6 +46,7 @@ class SignUpScreen extends StatelessWidget {
                     signUpController.onEvent(EmailChanged(value));
                   },
                   errorStatus: signUpController.registrationUIState.emailError,
+                  validator: (String) {},
                 ),
                 const SizedBox(height: 20),
                 MyTextFieldComponent(
@@ -56,6 +57,7 @@ class SignUpScreen extends StatelessWidget {
                   },
                   errorStatus:
                       signUpController.registrationUIState.firstNameError,
+                  validator: (String) {},
                 ),
                 const SizedBox(height: 20),
                 PasswordTextFieldComponent(
@@ -66,6 +68,7 @@ class SignUpScreen extends StatelessWidget {
                   },
                   errorStatus:
                       signUpController.registrationUIState.passwordError,
+                  validator: (String) {},
                 ),
                 const SizedBox(height: 20),
                 CheckboxComponent(
@@ -94,7 +97,7 @@ class SignUpScreen extends StatelessWidget {
                 ClickableLoginTextComponent(
                   tryingToLogin: true,
                   onTextSelected: (string) {
-                    navigate(context, LoginScreen());
+                    navigate(context, "/");
                   },
                 ),
               ],
