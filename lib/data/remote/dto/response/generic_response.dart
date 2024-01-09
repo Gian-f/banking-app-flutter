@@ -13,7 +13,7 @@ class GenericResponse {
   static GenericResponse fromJson(Map<String, dynamic> json) {
     return GenericResponse(
       result: json['result'],
-      statusCode: json['statusCode'],
+      statusCode: json['status_code'],
       message: json['message'],
       status: json['status'],
     );

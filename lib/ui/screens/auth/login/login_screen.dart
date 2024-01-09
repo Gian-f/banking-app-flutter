@@ -1,5 +1,6 @@
 import 'package:banking_app/domain/controller/login_controller.dart';
 import 'package:banking_app/domain/repository/auth_repositoryimpl.dart';
+import 'package:banking_app/domain/service/data_service.dart';
 import 'package:banking_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,7 +15,8 @@ import 'login_state.dart';
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
-  final LoginController loginController = LoginController(AuthRepositoryimpl());
+  final LoginController loginController =
+      LoginController(AuthRepositoryimpl(DataService()), DataService());
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -51,7 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
         _isAuthenticating = false;
       });
     } on PlatformException catch (e) {
-      print(e);
       setState(() {
         _isAuthenticating = false;
       });
@@ -62,12 +63,28 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     if (authenticated) {
-      Navigator.pushReplacementNamed(context, '/home');
-      showSnackbar(context, const Text("Sucesso!"));
+      navigateFinish(context, '/home');
+      showSnackbar(context, const Text("Autenticação realizada com sucesso!"));
     } else {
       // Autenticação falhou, mostrar mensagem de erro
-      showSnackbar(context, const Text("Autenticação falhou"));
     }
+  }
+
+  bool _isVisible = false;
+  bool _loginIsLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthorization();
+  }
+
+  Future<void> _checkAuthorization() async {
+    bool isAuth = await widget.loginController.dataService.isAuthenticated();
+    if (isAuth) {
+      _authenticateWithBiometrics();
+    }
+    setState(() => _isVisible = isAuth);
   }
 
   @override
@@ -81,18 +98,14 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               const HeadingTextComponent(value: 'Entrar'),
               const SizedBox(height: 20),
-              FutureBuilder<bool>(
-                future: widget.loginController.onEvent(LoginButtonClicked()),
-                builder: (context, snapshot) {
-                  return ButtonComponent(
-                    isEnabled: true,
-                    isLoading:
-                        snapshot.connectionState == ConnectionState.waiting,
-                    value: 'Entrar',
-                    onButtonClicked: () {
-                      onButtonClicked(context);
-                    },
-                  );
+              MyTextFieldComponent(
+                labelValue: 'E-mail',
+                iconData: Icons.person_outline,
+                onTextChanged: (value) {
+                  widget.loginController.onEvent(EmailChanged(value));
+                },
+                validator: (value) {
+                  return isEmailValid(value);
                 },
               ),
               const SizedBox(height: 20),
@@ -106,28 +119,41 @@ class _LoginScreenState extends State<LoginScreen> {
                   return isPasswordValid(value);
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               ButtonComponent(
                 isEnabled: true,
-                isLoading: false,
+                isLoading: _loginIsLoading,
                 value: 'Entrar',
                 onButtonClicked: () {
-                  onButtonClicked(context);
+                  onLoginClicked();
+                  setState(() {
+                    _loginIsLoading = true;
+                  });
                 },
               ),
               const SizedBox(height: 20),
-              const DividerTextComponent(),
+              ForgotButtonComponent(
+                isEnabled: true,
+                isLoading: false,
+                value: 'Esqueci minha senha',
+                onButtonClicked: () {
+                  onForgotPasswordClicked(context);
+                },
+              ),
               const SizedBox(height: 20),
-              TextButton(
-                onPressed: () {
+              // const DividerTextComponent(),
+              BiometricOptionComponent(
+                isVisible: _isVisible,
+                onButtonClicked: () {
+                  _authenticateWithBiometrics();
+                },
+              ),
+              const SizedBox(height: 30),
+              ClickableLoginTextComponent(
+                tryingToLogin: false,
+                onTextSelected: (string) {
                   navigate(context, "/signup");
                 },
-                child: ClickableLoginTextComponent(
-                  tryingToLogin: false,
-                  onTextSelected: (string) {
-                    navigate(context, "/signup");
-                  },
-                ),
               ),
             ],
           ),
@@ -136,22 +162,32 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void onButtonClicked(BuildContext context) {
-    widget.loginController.onEvent(LoginButtonClicked()).then((success) {
-      if (success) {
-        navigateFinish(context, "/home").whenComplete(() => showSnackbar(
-            context, const Text("Operação realizada com sucesso!")));
-      } else {
-        showSnackbar(context, const Text("Erro: Falha no login"));
+  void onLoginClicked() async {
+    setState(() => _loginIsLoading = true);
+    try {
+      bool success = await widget.loginController.onEvent(LoginButtonClicked());
+      if (mounted) {
+        if (success) {
+          navigateFinish(context, "/home");
+          showSnackbar(context, const Text("Operação realizada com sucesso!"));
+        } else {
+          showSnackbar(context, const Text("Erro: Falha no login"));
+        }
       }
-    }).catchError((error) {
-      if (error.toString().contains("SocketException")) {
+    } catch (error) {
+      if (mounted) {
         showSnackbar(context,
             const Text("Ocorreu um erro. Tente novamente mais tarde!"));
-      } else {
-        showSnackbar(context, Text("Erro: $error"));
       }
-    });
+    } finally {
+      if (mounted) {
+        setState(() => _loginIsLoading = false);
+      }
+    }
+  }
+
+  void onForgotPasswordClicked(BuildContext context) {
+    showSnackbar(context, const Text("TODO"));
   }
 
   isEmailValid(String? value) {

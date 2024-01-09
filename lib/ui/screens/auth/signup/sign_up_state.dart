@@ -1,5 +1,5 @@
 class RegistrationUIState {
-  String? firstName;
+  String? fullName;
   String? email;
   String? phoneNumber;
   String? password;
@@ -11,7 +11,7 @@ class RegistrationUIState {
   bool? privacyPolicyError;
 
   RegistrationUIState({
-    this.firstName,
+    this.fullName,
     this.email,
     this.phoneNumber,
     this.password,
@@ -24,7 +24,7 @@ class RegistrationUIState {
   });
 
   RegistrationUIState copyWith({
-    String? firstName,
+    String? fullName,
     String? email,
     String? phoneNumber,
     String? password,
@@ -36,7 +36,7 @@ class RegistrationUIState {
     bool? privacyPolicyError,
   }) {
     return RegistrationUIState(
-      firstName: firstName ?? this.firstName,
+      fullName: fullName ?? this.fullName,
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       password: password ?? this.password,
@@ -53,10 +53,10 @@ class RegistrationUIState {
 
 abstract class SignupUIEvent {}
 
-class FirstNameChanged extends SignupUIEvent {
-  final String firstName;
+class FullNameChanged extends SignupUIEvent {
+  final String fullName;
 
-  FirstNameChanged(this.firstName);
+  FullNameChanged(this.fullName);
 }
 
 class EmailChanged extends SignupUIEvent {

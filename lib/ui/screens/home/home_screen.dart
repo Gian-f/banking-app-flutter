@@ -5,6 +5,7 @@ import 'package:banking_app/ui/screens/home/sections/transactions_section.dart';
 import 'package:banking_app/ui/screens/home/sections/wallet_section.dart';
 import 'package:banking_app/ui/screens/transaction/transaction_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../widgets/app_bar.dart';
 import '../profile/profile_screen.dart';
@@ -24,42 +25,75 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Scaffold(
-        appBar: const HomeAppBar(),
-        body: ListView(
-          children: const [
-            SizedBox(
-              width: 400,
-              height: 115,
-              child: WalletSection(),
-            ),
-            SizedBox(
-              width: 400,
-              height: 200,
-              child: CardsSection(),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              width: 400,
-              height: 300,
-              child: GoalsSection(),
-            ),
-            SizedBox(
-              width: 400,
-              height: 230,
-              child: FinanceSection(),
-            ),
-            SizedBox(
-              width: 400,
-              height: 400,
-              child: TransactionsSection(),
-            ),
-          ],
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          if (didPop) {
+            return;
+          }
+          await onBackPressDialog(context);
+        },
+        child: Scaffold(
+          appBar: const HomeAppBar(),
+          body: ListView(
+            children: const [
+              SizedBox(
+                width: 400,
+                height: 115,
+                child: WalletSection(),
+              ),
+              SizedBox(
+                width: 400,
+                height: 200,
+                child: CardsSection(),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              SizedBox(
+                width: 400,
+                height: 300,
+                child: GoalsSection(),
+              ),
+              SizedBox(
+                width: 400,
+                height: 230,
+                child: FinanceSection(),
+              ),
+              SizedBox(
+                width: 400,
+                height: 400,
+                child: TransactionsSection(),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> onBackPressDialog(BuildContext context) async {
+    final shouldPop = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Atenção!'),
+        content: const Text('Você tem certeza que deseja sair?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Sim'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Não'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldPop ?? false) {
+      SystemNavigator.pop();
+    }
   }
 }
 

@@ -54,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const Text("Adicione uma Foto",
                 style: TextStyle(fontWeight: FontWeight.w500)),
             const SizedBox(height: 20),
-            MyTextFieldComponent(
+            PhoneTextFieldComponent(
               labelValue: 'Nome Completo',
               iconData: Icons.person_outlined,
               onTextChanged: (string) {},
@@ -62,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               validator: (rule) {},
             ),
             const SizedBox(height: 20),
-            MyTextFieldComponent(
+            PhoneTextFieldComponent(
               labelValue: 'Telefone',
               iconData: Icons.phone_android,
               onTextChanged: (string) {},
@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               validator: (rule) {},
             ),
             const SizedBox(height: 20),
-            MyTextFieldComponent(
+            PhoneTextFieldComponent(
               labelValue: 'E-mail',
               iconData: Icons.email_outlined,
               onTextChanged: (string) {},

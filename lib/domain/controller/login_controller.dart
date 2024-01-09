@@ -1,4 +1,5 @@
 import 'package:banking_app/domain/repository/auth_repository.dart';
+import 'package:banking_app/domain/service/data_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../data/remote/dto/request/login_request.dart';
@@ -6,8 +7,9 @@ import '../../ui/screens/auth/login/login_state.dart';
 
 class LoginController {
   final AuthRepository _authRepository;
+  final DataService dataService;
 
-  LoginController(this._authRepository);
+  LoginController(this._authRepository, this.dataService);
 
   final storage = const FlutterSecureStorage(
       aOptions: AndroidOptions(
@@ -34,22 +36,19 @@ class LoginController {
   }
 
   Future<bool> _login(String? email, String? password) async {
-    if (email == null || password == null) {
-      throw ArgumentError('Email and password must not be null');
+    if (email!.isEmpty || password!.isEmpty) {
+      throw Exception('E-mail ou senha não podem ser vazios!');
     }
 
     final request = LoginRequest(
-      email: email,
-      password: password,
+      email: email.trim(),
+      password: password.trim(),
     );
     try {
       await _authRepository.login(request);
-      String? token = await storage.read(key: 'access_token');
-      print(token);
       return true;
     } catch (e) {
-      print('Login error: $e');
-      throw Exception('Login error: $e');
+      throw Exception(e);
     }
   }
 }
