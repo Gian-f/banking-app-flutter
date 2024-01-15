@@ -16,7 +16,7 @@ class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   final LoginController loginController =
-      LoginController(AuthRepositoryimpl(DataService()), DataService());
+      LoginController(AuthRepositoryimpl(), DataService());
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 

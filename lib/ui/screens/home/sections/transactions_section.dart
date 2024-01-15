@@ -10,7 +10,7 @@ final transactions = [
     category: "Trabalho",
     type: TransactionType.entrada,
     icon: Icons.fastfood,
-    price: 687.0,
+    price: 2000.0,
     date: DateTime.now(),
   ),
   Transaction(
@@ -138,7 +138,9 @@ class TransactionItem extends StatelessWidget {
                 transaction.type == TransactionType.entrada
                     ? "+ ${formatMoney(transaction.price)}"
                     : "- ${formatMoney(transaction.price)}",
-                style: const TextStyle(fontSize: 17),
+                style: transaction.type == TransactionType.entrada
+                    ? const TextStyle(fontSize: 17, color: Colors.green)
+                    : const TextStyle(fontSize: 17, color: Colors.red),
               ),
               const SizedBox(height: 9),
               Text(

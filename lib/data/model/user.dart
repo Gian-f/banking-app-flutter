@@ -1,17 +1,27 @@
 class User {
-  final int id_account;
-  final String name;
+  late final String name;
   final String email;
-  final double created_at;
-  final double updated_at;
-  final String contact_number;
+  String? photo;
+  late final String contact_number;
 
   User({
-    required this.id_account,
     required this.name,
     required this.email,
-    required this.created_at,
-    required this.updated_at,
+    required this.photo,
     required this.contact_number,
   });
+
+  bool get isEmpty =>
+      name == "Carregando..." &&
+      email == "Carregando..." &&
+      contact_number == "Carregando...";
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      name: json['name'],
+      email: json['email'],
+      contact_number: json['contact_number'],
+      photo: json['photo'],
+    );
+  }
 }

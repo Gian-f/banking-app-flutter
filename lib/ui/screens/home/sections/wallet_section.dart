@@ -39,7 +39,7 @@ class _WalletSectionState extends State<WalletSection> {
                   width: 6,
                 ),
                 if (isTotalVisible)
-                  const Text("44.000,00",
+                  const Text("500,00",
                       style:
                           TextStyle(fontSize: 26, fontWeight: FontWeight.bold))
                 else

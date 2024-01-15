@@ -35,15 +35,27 @@ dependencies:
   intl: ^0.17.0
   http: ^1.1.2
   flutter_logs: ^2.1.11
+  animated_splash_screen: ^1.3.0
   rxdart: ^0.27.2
   local_auth: ^2.1.7
+  universal_io: ^2.2.2
   flutter_secure_storage: ^9.0.0
+  image_picker: ^1.0.7
+  get_it: ^7.6.6
+  masked_text_field: any
+  permission_handler: ^11.1.0
 
 
 
 dev_dependencies:
-  flutter_test:
+  flutter_launcher_icons: "^0.10.0"
+   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/ic_logo.png"
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -67,6 +79,7 @@ flutter:
   assets:
     - assets/ic_mastercard.png
     - assets/ic_visa.png
+    - assets/ic_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:masked_text_field/masked_text_field.dart';
 
 class NormalTextComponent extends StatelessWidget {
   final String value;
@@ -43,15 +43,19 @@ class MyTextFieldComponent extends StatefulWidget {
   final IconData iconData;
   final Function(String) onTextChanged;
   final String? Function(String?) validator;
+  final bool enabled;
   final bool? errorStatus;
+  final String? initialValue;
 
   const MyTextFieldComponent(
       {super.key,
       required this.labelValue,
       required this.iconData,
       required this.onTextChanged,
+      this.enabled = true,
       required this.validator,
-      this.errorStatus = false});
+      this.errorStatus = false,
+      this.initialValue});
 
   @override
   _MyTextFieldComponentState createState() => _MyTextFieldComponentState();
@@ -64,7 +68,7 @@ class _MyTextFieldComponentState extends State<MyTextFieldComponent> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: widget.initialValue ?? '');
     _controller.addListener(() {
       widget.onTextChanged(_controller.text);
     });
@@ -84,6 +88,7 @@ class _MyTextFieldComponentState extends State<MyTextFieldComponent> {
         labelText: widget.labelValue,
         prefixIcon: Icon(widget.iconData),
         filled: true,
+        enabled: widget.enabled,
         fillColor: Theme.of(context).colorScheme.surfaceVariant,
         border: UnderlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -107,6 +112,7 @@ class PhoneTextFieldComponent extends StatefulWidget {
   final Function(String) onTextChanged;
   final String? Function(String?) validator;
   final bool? errorStatus;
+  final String? initialValue;
 
   const PhoneTextFieldComponent(
       {super.key,
@@ -114,7 +120,8 @@ class PhoneTextFieldComponent extends StatefulWidget {
       required this.iconData,
       required this.onTextChanged,
       required this.validator,
-      this.errorStatus = false});
+      this.errorStatus = false,
+      this.initialValue});
 
   @override
   _PhoneTextFieldComponentState createState() =>
@@ -128,7 +135,7 @@ class _PhoneTextFieldComponentState extends State<PhoneTextFieldComponent> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: widget.initialValue ?? '');
     _controller.addListener(() {
       widget.onTextChanged(_controller.text);
     });
@@ -142,9 +149,11 @@ class _PhoneTextFieldComponentState extends State<PhoneTextFieldComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: _controller,
-      decoration: InputDecoration(
+    return MaskedTextField(
+      mask: "(xx)xxxxx-xxxx",
+      textFieldController: _controller,
+      keyboardType: TextInputType.number,
+      inputDecoration: InputDecoration(
         labelText: widget.labelValue,
         prefixIcon: Icon(widget.iconData),
         filled: true,
@@ -160,11 +169,8 @@ class _PhoneTextFieldComponentState extends State<PhoneTextFieldComponent> {
         ),
         contentPadding: const EdgeInsets.all(10),
       ),
-      keyboardType: TextInputType.number,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.digitsOnly
-      ],
-      validator: widget.validator,
+      maxLength: 14,
+      onChange: (String value) {},
     );
   }
 }
@@ -352,6 +358,56 @@ class ForgotButtonComponent extends StatelessWidget {
   final bool isLoading;
 
   const ForgotButtonComponent({
+    super.key,
+    required this.value,
+    required this.onButtonClicked,
+    this.isEnabled = false,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(15),
+      onTap: isEnabled ? onButtonClicked as void Function()? : null,
+      child: Ink(
+        width: double.infinity,
+        height: 50,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+                color: Theme.of(context).colorScheme.secondary, width: 0.5)),
+        child: Center(
+          child: isLoading
+              ? const SizedBox(
+                  height: 20.0,
+                  width: 20.0,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                )
+              : Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+class DeleteAccountButtonComponent extends StatelessWidget {
+  final String value;
+  final Function onButtonClicked;
+  final bool isEnabled;
+  final bool isLoading;
+
+  const DeleteAccountButtonComponent({
     super.key,
     required this.value,
     required this.onButtonClicked,

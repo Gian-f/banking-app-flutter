@@ -47,5 +47,9 @@
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
     <string>Why is my app authenticating using face id?</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string> describe why your app needs access to the camera. This is called Privacy - Camera Usage Description in the visual editor.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>describe why your app needs permission for the photo library. This is called Privacy - Photo Library Usage Description in the visual editor.</string>
 </dict>
 </plist>

@@ -5,22 +5,22 @@ import '../../../../data/model/finance.dart';
 final financeList = [
   Finance(
     icon: Icons.work,
-    name: "My\nBusiness",
-    background: Colors.orange,
-  ),
-  Finance(
-    icon: Icons.wallet,
-    name: "My\nWallet",
-    background: Colors.blue,
-  ),
-  Finance(
-    icon: Icons.star_half,
-    name: "Finance\nAnalytics",
+    name: "Meus\nInvestimentos",
     background: Colors.purple,
   ),
   Finance(
+    icon: Icons.wallet,
+    name: "Minha\nCarteira",
+    background: Colors.blue,
+  ),
+  Finance(
+    icon: Icons.analytics_outlined,
+    name: "Minhas\nEstatísticas",
+    background: Colors.orange,
+  ),
+  Finance(
     icon: Icons.monetization_on,
-    name: "My\nTransactions",
+    name: "Programação de\nPagamentos",
     background: Colors.green,
   ),
 ];

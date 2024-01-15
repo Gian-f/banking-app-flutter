@@ -1,5 +1,4 @@
 import 'package:banking_app/domain/controller/signup_controller.dart';
-import 'package:banking_app/domain/service/data_service.dart';
 import 'package:banking_app/navigation.dart';
 import 'package:banking_app/ui/screens/auth/signup/sign_up_state.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import '../../../widgets/widgets.dart';
 
 class SignUpScreen extends StatelessWidget {
   final SignUpController signUpController =
-      SignUpController(AuthRepositoryimpl(DataService()));
+      SignUpController(AuthRepositoryimpl());
 
   SignUpScreen({super.key});
 

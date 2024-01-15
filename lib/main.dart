@@ -1,14 +1,19 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:banking_app/ui/screens/auth/login/login_screen.dart';
 import 'package:banking_app/ui/screens/auth/signup/sign_up_screen.dart';
 import 'package:banking_app/ui/screens/home/home_screen.dart';
 import 'package:banking_app/ui/screens/profile/profile_screen.dart';
 import 'package:banking_app/ui/screens/transaction/transaction_screen.dart';
 import 'package:banking_app/ui/screens/wallet/wallet_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
+import 'data/di/module.dart';
 import 'ui/theme/colors.dart';
 
 void main() {
+  setupLocator();
   runApp(const MyApp());
 }
 
@@ -25,10 +30,19 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       initialRoute: '/',
+      home: AnimatedSplashScreen(
+          duration: 3000,
+          splash: Image.asset("assets/ic_logo.png"),
+          nextScreen: LoginScreen(),
+          centered: true,
+          splashTransition: SplashTransition.slideTransition,
+          pageTransitionType: PageTransitionType.rightToLeft,
+          animationDuration: Durations.extralong4,
+          splashIconSize: 200,
+          backgroundColor: CupertinoColors.black),
       routes: {
-        '/': (context) => LoginScreen(),
-        '/home': (context) => const HomeScreen(),
         '/signup': (context) => SignUpScreen(),
+        '/home': (context) => HomeScreen(),
         '/transactions': (context) => const TransactionScreen(),
         '/wallet': (context) => const WalletScreen(),
         '/profile': (context) => const ProfileScreen(),

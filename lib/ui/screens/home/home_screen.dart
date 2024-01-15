@@ -1,3 +1,4 @@
+import 'package:banking_app/domain/controller/home_controller.dart';
 import 'package:banking_app/ui/screens/home/sections/card_section.dart';
 import 'package:banking_app/ui/screens/home/sections/finance_section.dart';
 import 'package:banking_app/ui/screens/home/sections/goals_section.dart';
@@ -6,20 +7,27 @@ import 'package:banking_app/ui/screens/home/sections/wallet_section.dart';
 import 'package:banking_app/ui/screens/transaction/transaction_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../data/di/module.dart';
+import '../../../domain/repository/home_repositoryimpl.dart';
+import '../../../navigation.dart';
 import '../../widgets/app_bar.dart';
 import '../profile/profile_screen.dart';
 import '../wallet/wallet_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+
+  final HomeController homeController = HomeController(HomeRepositoryimpl());
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({Key? key}) : super(key: key);
+  final controller = getIt<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +42,7 @@ class HomePage extends StatelessWidget {
           await onBackPressDialog(context);
         },
         child: Scaffold(
-          appBar: const HomeAppBar(),
+          appBar: HomeAppBar(),
           body: ListView(
             children: const [
               SizedBox(
@@ -80,7 +88,7 @@ class HomePage extends StatelessWidget {
         content: const Text('Você tem certeza que deseja sair?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => logout(context),
             child: const Text('Sim'),
           ),
           TextButton(
@@ -98,15 +106,23 @@ class HomePage extends StatelessWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int currentPageIndex = 0;
+  late List<Widget> _pages;
+
+  @override
+  void initState() {
+    // widget.homeController.fetchUserData();
+    super.initState();
+    _pages = [
+      HomePage(),
+      const TransactionScreen(),
+      const WalletScreen(),
+      const ProfileScreen(),
+    ];
+  }
+
   final PageController _pageController = PageController();
 
-  final List<Widget> _pages = [
-    const HomePage(),
-    const TransactionScreen(),
-    const WalletScreen(),
-    const ProfileScreen(),
-  ];
+  int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -158,4 +174,15 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+}
+
+void logout(BuildContext context) {
+  final controller = getIt<HomeController>();
+  const storage = FlutterSecureStorage(
+      aOptions: AndroidOptions(
+    encryptedSharedPreferences: true,
+  ));
+  storage.deleteAll();
+  controller.user.value = null;
+  navigateFinish(context, "/");
 }
