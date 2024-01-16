@@ -1,3 +1,4 @@
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:masked_text_field/masked_text_field.dart';
@@ -44,8 +45,10 @@ class MyTextFieldComponent extends StatefulWidget {
   final Function(String) onTextChanged;
   final String? Function(String?) validator;
   final bool enabled;
+  final Function()? onTap;
   final bool? errorStatus;
   final String? initialValue;
+  final TextEditingController? controller;
 
   const MyTextFieldComponent(
       {super.key,
@@ -55,7 +58,9 @@ class MyTextFieldComponent extends StatefulWidget {
       this.enabled = true,
       required this.validator,
       this.errorStatus = false,
-      this.initialValue});
+      this.onTap = null,
+      this.initialValue,
+      this.controller});
 
   @override
   _MyTextFieldComponentState createState() => _MyTextFieldComponentState();
@@ -68,7 +73,8 @@ class _MyTextFieldComponentState extends State<MyTextFieldComponent> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialValue ?? '');
+    _controller = widget.controller ??
+        TextEditingController(text: widget.initialValue ?? '');
     _controller.addListener(() {
       widget.onTextChanged(_controller.text);
     });
@@ -84,6 +90,7 @@ class _MyTextFieldComponentState extends State<MyTextFieldComponent> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: _controller,
+      onTap: widget.onTap,
       decoration: InputDecoration(
         labelText: widget.labelValue,
         prefixIcon: Icon(widget.iconData),
@@ -102,6 +109,81 @@ class _MyTextFieldComponentState extends State<MyTextFieldComponent> {
         contentPadding: const EdgeInsets.all(10),
       ),
       validator: widget.validator,
+    );
+  }
+}
+
+class NumberFieldComponent extends StatefulWidget {
+  final String labelValue;
+  final IconData iconData;
+  final Function(String) onTextChanged;
+  final String? Function(String?) validator;
+  final bool enabled;
+  final bool? errorStatus;
+  final String? initialValue;
+  final MoneyMaskedTextController? controller;
+
+  const NumberFieldComponent(
+      {super.key,
+      required this.labelValue,
+      required this.iconData,
+      required this.onTextChanged,
+      this.enabled = true,
+      required this.validator,
+      this.errorStatus = false,
+      this.controller,
+      this.initialValue});
+
+  @override
+  _NumberFieldComponentState createState() => _NumberFieldComponentState();
+}
+
+class _NumberFieldComponentState extends State<NumberFieldComponent> {
+  late MoneyMaskedTextController _controller;
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        (MoneyMaskedTextController(leftSymbol: 'R\$ ') ?? widget.controller)!;
+    if (widget.initialValue != null && widget.initialValue!.isNotEmpty) {
+      _controller.updateValue(double.parse(widget.initialValue!));
+    }
+
+    _controller.addListener(() {
+      widget.onTextChanged(_controller.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: _controller,
+      keyboardType: TextInputType.numberWithOptions(decimal: true),
+      decoration: InputDecoration(
+        labelText: widget.labelValue,
+        prefixIcon: Icon(widget.iconData),
+        filled: true,
+        enabled: widget.enabled,
+        fillColor: Theme.of(context).colorScheme.surfaceVariant,
+        border: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        labelStyle: const TextStyle(color: Colors.white),
+        focusedBorder: UnderlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.all(10),
+      ),
     );
   }
 }

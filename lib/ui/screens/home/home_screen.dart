@@ -184,5 +184,5 @@ void logout(BuildContext context) {
   ));
   storage.deleteAll();
   controller.user.value = null;
-  navigateFinish(context, "/");
+  navigateFinish(context, "/login");
 }

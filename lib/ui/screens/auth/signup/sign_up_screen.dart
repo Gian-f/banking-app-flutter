@@ -97,7 +97,7 @@ class SignUpScreen extends StatelessWidget {
                 ClickableLoginTextComponent(
                   tryingToLogin: true,
                   onTextSelected: (string) {
-                    navigate(context, "/");
+                    navigate(context, "/login");
                   },
                 ),
               ],
@@ -111,7 +111,7 @@ class SignUpScreen extends StatelessWidget {
   void onButtonClicked(BuildContext context) {
     signUpController.onEvent(RegisterButtonClicked()).then((result) {
       if (result) {
-        navigateFinish(context, "/");
+        navigateFinish(context, "/login");
         showSnackbar(context, const Text("Operação realizada com sucesso!"));
       } else {
         showSnackbar(context, const Text("Erro: Falha ao cadastrar usuário!"));

@@ -1,4 +1,5 @@
-import 'package:banking_app/utils/util.dart';
+import 'package:banking_app/navigation.dart';
+import 'package:banking_app/ui/screens/goal/list_goal_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../data/model/goal.dart';
@@ -10,6 +11,7 @@ List<Goal> goals = [
     icon: Icons.home,
     currentProgress: 32000.0,
     goalNumber: 200000.0,
+    status: GoalStatus.ATIVO,
     expectedDate: DateTime.now(),
   ),
   Goal(
@@ -17,6 +19,7 @@ List<Goal> goals = [
     icon: Icons.phone_android,
     currentProgress: 1400.0,
     goalNumber: 2300.0,
+    status: GoalStatus.INATIVO,
     expectedDate: DateTime.now(),
   ),
   Goal(
@@ -24,6 +27,7 @@ List<Goal> goals = [
     icon: Icons.directions_car,
     currentProgress: 10000.0,
     goalNumber: 20000.0,
+    status: GoalStatus.ATIVO,
     expectedDate: DateTime.now(),
   ),
 ];
@@ -73,7 +77,9 @@ class _GoalsSectionState extends State<GoalsSection> {
             ),
             if (goals.isNotEmpty)
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  navigate(context, "/goals");
+                },
                 child: const Text(
                   'Ver mais',
                   style: TextStyle(
@@ -113,71 +119,6 @@ class _GoalsSectionState extends State<GoalsSection> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class GoalItem extends StatelessWidget {
-  final Goal goal;
-
-  const GoalItem({super.key, required this.goal});
-
-  @override
-  Widget build(BuildContext context) {
-    double progressFraction = goal.currentProgress / goal.goalNumber;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-              child: Icon(goal.icon, color: Colors.white),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              goal.name,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'Data prevista: ${dateFormat(goal.expectedDate)}',
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            Stack(
-              children: [
-                LinearProgressIndicator(
-                  value: progressFraction,
-                  borderRadius: BorderRadius.circular(6),
-                  minHeight: 20,
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0,
-                  child: Center(
-                    child: Text('${(progressFraction * 100).toInt()}%',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('Salvo:\n${formatMoney(goal.currentProgress)}'),
-                Text('Objetivo:\n${formatMoney(goal.goalNumber)}'),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

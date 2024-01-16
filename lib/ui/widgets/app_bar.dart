@@ -57,9 +57,9 @@ class _HomeAppBarState extends State<HomeAppBar> {
                   padding: const EdgeInsets.all(6),
                   child: Row(
                     children: [
-                      customIconButton(15, () {
-                        showSnackbar(context, const Text("Search"));
-                      }, Icons.search, context),
+                      // customIconButton(15, () {
+                      //   showSnackbar(context, const Text("Search"));
+                      // }, Icons.search, context),
                       Container(width: 12),
                       customIconButton(15, () {
                         showSnackbar(context, const Text("Not"));

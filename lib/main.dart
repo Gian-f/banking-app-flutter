@@ -1,6 +1,8 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:banking_app/ui/screens/auth/login/login_screen.dart';
 import 'package:banking_app/ui/screens/auth/signup/sign_up_screen.dart';
+import 'package:banking_app/ui/screens/goal/add_goal_screen.dart';
+import 'package:banking_app/ui/screens/goal/list_goal_screen.dart';
 import 'package:banking_app/ui/screens/home/home_screen.dart';
 import 'package:banking_app/ui/screens/profile/profile_screen.dart';
 import 'package:banking_app/ui/screens/transaction/transaction_screen.dart';
@@ -31,7 +33,6 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       home: AnimatedSplashScreen(
-          duration: 3000,
           splash: Image.asset("assets/ic_logo.png"),
           nextScreen: LoginScreen(),
           centered: true,
@@ -41,11 +42,14 @@ class MyApp extends StatelessWidget {
           splashIconSize: 200,
           backgroundColor: CupertinoColors.black),
       routes: {
+        '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUpScreen(),
         '/home': (context) => HomeScreen(),
         '/transactions': (context) => const TransactionScreen(),
         '/wallet': (context) => const WalletScreen(),
         '/profile': (context) => const ProfileScreen(),
+        '/goals': (context) => ListGoalScreen(),
+        '/goals/add': (context) => AddGoalScreen(),
       },
     );
   }

@@ -28,6 +28,18 @@ String formatMoney(double value) {
   return formatCurrency.format(value);
 }
 
+String formatDateString(String inputDate) {
+  // Converte a string para um objeto DateTime
+  DateTime dateTime = DateTime.parse(inputDate);
+
+  // Formata a data para o formato desejado
+  String formattedDate = "${dateTime.day.toString().padLeft(2, '0')}/"
+      "${dateTime.month.toString().padLeft(2, '0')}/"
+      "${dateTime.year}";
+
+  return formattedDate;
+}
+
 String dateFormat(DateTime date) {
   final dateFormat = DateFormat('dd/MM/yyyy');
   return dateFormat.format(date);
