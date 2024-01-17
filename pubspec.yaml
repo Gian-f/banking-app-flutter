@@ -46,6 +46,7 @@ dependencies:
   permission_handler: ^11.1.0
   dropdown_search: ^5.0.6
   extended_masked_text: ^2.3.1
+  skeletonizer: ^1.0.1
 
 
 

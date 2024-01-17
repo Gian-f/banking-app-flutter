@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../navigation.dart';
 import '../../widgets/app_bar.dart';
 
 class TransactionScreen extends StatelessWidget {
@@ -11,7 +10,7 @@ class TransactionScreen extends StatelessWidget {
     return Scaffold(
         appBar: TopBarSection(
           onBackPressed: () {
-            navigate(context, "/home");
+            Navigator.of(context).pop();
           },
           title: 'Transações',
         ),

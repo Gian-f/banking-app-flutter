@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -40,9 +42,25 @@ String formatDateString(String inputDate) {
   return formattedDate;
 }
 
+String formatDate(String? date) {
+  DateFormat inputFormat = DateFormat("dd/MM/yyyy");
+  DateTime dateTime = inputFormat.parse(date!);
+  String httpDate = HttpDate.format(dateTime);
+  return httpDate;
+}
+
 String dateFormat(DateTime date) {
   final dateFormat = DateFormat('dd/MM/yyyy');
   return dateFormat.format(date);
+}
+
+DateTime dateFormatString(String date) {
+  return DateTime.parse(date).toUtc();
+}
+
+DateTime dateFormatStringUtc(String date) {
+  final dateFormat = DateFormat("dd/MM/yyyy");
+  return dateFormat.parse(date).toUtc();
 }
 
 bool isAlreadyShown(DateTime lastShown) {

@@ -1,3 +1,4 @@
+import 'package:banking_app/domain/controller/goal_controller.dart';
 import 'package:banking_app/domain/controller/home_controller.dart';
 import 'package:banking_app/ui/screens/home/sections/card_section.dart';
 import 'package:banking_app/ui/screens/home/sections/finance_section.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../data/di/module.dart';
-import '../../../domain/repository/home_repositoryimpl.dart';
 import '../../../navigation.dart';
 import '../../widgets/app_bar.dart';
 import '../profile/profile_screen.dart';
@@ -19,8 +19,6 @@ import '../wallet/wallet_screen.dart';
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
 
-  final HomeController homeController = HomeController(HomeRepositoryimpl());
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -28,6 +26,7 @@ class HomeScreen extends StatefulWidget {
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
   final controller = getIt<HomeController>();
+  final goalsController = getIt<GoalController>();
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // widget.homeController.fetchUserData();
     super.initState();
     _pages = [
       HomePage(),

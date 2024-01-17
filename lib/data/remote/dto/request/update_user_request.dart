@@ -9,6 +9,7 @@ class UpdateUserRequest {
   Map<String, dynamic> toMap() {
     return {
       'name': name,
+      'profile_image': photo,
       'contact_number': contactNumber,
     };
   }

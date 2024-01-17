@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../navigation.dart';
 import '../../widgets/app_bar.dart';
 
 class WalletScreen extends StatelessWidget {
@@ -11,7 +10,7 @@ class WalletScreen extends StatelessWidget {
     return Scaffold(
         appBar: TopBarSection(
           onBackPressed: () {
-            navigate(context, "/wallet");
+            Navigator.of(context).pop();
           },
           title: 'Carteira',
         ),

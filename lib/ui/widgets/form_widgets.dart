@@ -146,7 +146,7 @@ class _NumberFieldComponentState extends State<NumberFieldComponent> {
   void initState() {
     super.initState();
     _controller =
-        (MoneyMaskedTextController(leftSymbol: 'R\$ ') ?? widget.controller)!;
+        widget.controller ?? MoneyMaskedTextController(leftSymbol: 'R\$ ');
     if (widget.initialValue != null && widget.initialValue!.isNotEmpty) {
       _controller.updateValue(double.parse(widget.initialValue!));
     }

@@ -3,20 +3,19 @@ import 'dart:convert';
 import 'package:banking_app/data/remote/dto/request/signup_request.dart';
 import 'package:banking_app/data/remote/dto/response/login_response.dart';
 import 'package:banking_app/domain/repository/auth_repository.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '../../data/di/module.dart';
 import '../../data/remote/dto/request/login_request.dart';
 import '../../data/remote/dto/response/generic_response.dart';
 import '../../data/remote/infra/environment.dart';
+import '../service/data_service.dart';
 
 class AuthRepositoryimpl implements AuthRepository {
   @override
   Future<LoginResponse> login(LoginRequest loginRequest) async {
-    const storage = FlutterSecureStorage(
-        aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ));
+    final DataService dataService = getIt<DataService>();
+
     try {
       var response = await http.post(
         loginEndpoint,
@@ -24,7 +23,7 @@ class AuthRepositoryimpl implements AuthRepository {
       );
       if (response.statusCode == 200) {
         final resp = LoginResponse.fromJson(jsonDecode(response.body));
-        await storage.write(key: 'access_token', value: resp.token);
+        await dataService.storage.write(key: 'access_token', value: resp.token);
         return resp;
       } else {
         throw Exception('Falha no login: ${response.body}');

@@ -2,9 +2,10 @@ import 'package:banking_app/navigation.dart';
 import 'package:banking_app/ui/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../../../data/di/module.dart';
 import '../../../data/model/goal.dart';
+import '../../../domain/controller/goal_controller.dart';
 import '../../../utils/util.dart';
-import '../home/sections/goals_section.dart';
 
 enum GoalStatus { ATIVO, INATIVO, CONCLUIDO }
 
@@ -15,6 +16,13 @@ class ListGoalScreen extends StatefulWidget {
 
 class _ListGoalScreenState extends State<ListGoalScreen> {
   GoalStatus selectedChip = GoalStatus.ATIVO;
+  final _controller = getIt<GoalController>();
+
+  @override
+  void initState() {
+    _controller.fetchAllGoals();
+    super.initState();
+  }
 
   void _handleChipSelection(GoalStatus chip) {
     setState(() {
@@ -31,68 +39,75 @@ class _ListGoalScreenState extends State<ListGoalScreen> {
     );
   }
 
-  List<Goal> getFilteredGoals() {
+  List<Goal?> getFilteredGoals() {
     switch (selectedChip) {
       case GoalStatus.ATIVO:
-        return goals.where((goal) => goal.status == GoalStatus.ATIVO).toList();
+        return _controller.goals.value
+            .where((goal) => goal?.status == GoalStatus.ATIVO)
+            .toList();
       case GoalStatus.INATIVO:
-        return goals
-            .where((goal) => goal.status == GoalStatus.INATIVO)
+        return _controller.goals.value
+            .where((goal) => goal?.status == GoalStatus.INATIVO)
             .toList();
       case GoalStatus.CONCLUIDO:
-        return goals
-            .where((goal) => goal.status == GoalStatus.CONCLUIDO)
+        return _controller.goals.value
+            .where((goal) => goal?.status == GoalStatus.CONCLUIDO)
             .toList();
       default:
-        return goals;
+        return _controller.goals.value;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TopBarSection(
-          onBackPressed: () {
-            Navigator.of(context).pop();
-          },
-          title: "Objetivos"),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildFilterChip('Ativos', GoalStatus.ATIVO),
-                  _buildFilterChip('Inativos', GoalStatus.INATIVO),
-                  _buildFilterChip('Concluídos', GoalStatus.CONCLUIDO),
-                ],
-              ),
-            ),
-            if (getFilteredGoals().isEmpty)
-              EmptyGoalsState()
-            else
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.only(top: 4),
-                  itemCount: getFilteredGoals().length,
-                  itemBuilder: (context, index) {
-                    return GoalItem(goal: getFilteredGoals()[index]);
-                  },
+    return ValueListenableBuilder<List<Goal?>>(
+      valueListenable: _controller.goals,
+      builder: (context, goals, _) {
+        return Scaffold(
+          appBar: TopBarSection(
+              onBackPressed: () {
+                Navigator.of(context).pop();
+              },
+              title: "Objetivos"),
+          body: Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildFilterChip('Ativos', GoalStatus.ATIVO),
+                      _buildFilterChip('Inativos', GoalStatus.INATIVO),
+                      _buildFilterChip('Concluídos', GoalStatus.CONCLUIDO),
+                    ],
+                  ),
                 ),
-              ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
-          child: Icon(Icons.add, color: Colors.white),
-          onPressed: () {
-            navigate(context, "/goals/add");
-          }),
+                if (getFilteredGoals().isEmpty)
+                  EmptyGoalsState()
+                else
+                  Expanded(
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(top: 4),
+                      itemCount: getFilteredGoals().length,
+                      itemBuilder: (context, index) {
+                        return GoalItem(goal: getFilteredGoals()[index]!);
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+              backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+              child: Icon(Icons.add, color: Colors.white),
+              onPressed: () {
+                navigate(context, "/goals/add");
+              }),
+        );
+      },
     );
   }
 }
@@ -129,7 +144,7 @@ class GoalItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Data prevista: ${dateFormat(goal.expectedDate)}',
+                  'Data prevista: ${dateFormat(goal.expected_date)}',
                   style: const TextStyle(
                       fontSize: 13, fontWeight: FontWeight.bold),
                 ),
@@ -184,18 +199,20 @@ class EmptyGoalsState extends StatelessWidget {
         margin: const EdgeInsets.all(32.0),
         color: theme.colorScheme.surface,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            navigate(context, "/goals/add");
+          },
           borderRadius: BorderRadius.all(Radius.circular(12)),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(28.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  radius: 38.0,
+                  radius: 30.0,
                   backgroundColor: theme.colorScheme.surfaceVariant,
-                  child: const Icon(Icons.add, color: Colors.white, size: 44.0),
+                  child: const Icon(Icons.add, color: Colors.white, size: 40.0),
                 ),
                 const SizedBox(height: 12),
                 Text(
@@ -203,7 +220,7 @@ class EmptyGoalsState extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: theme.textTheme.bodyLarge?.color,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

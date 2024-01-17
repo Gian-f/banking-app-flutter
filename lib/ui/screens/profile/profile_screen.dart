@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:banking_app/navigation.dart';
 import 'package:banking_app/ui/screens/home/home_screen.dart';
 import 'package:banking_app/ui/screens/profile/profile_state.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: TopBarSection(
         onBackPressed: () {
-          navigate(context, "/home");
+          Navigator.of(context).pop();
         },
         title: 'Perfil',
       ),
