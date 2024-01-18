@@ -1,3 +1,4 @@
+import 'package:banking_app/ui/theme/colors.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -166,7 +167,7 @@ class _NumberFieldComponentState extends State<NumberFieldComponent> {
   Widget build(BuildContext context) {
     return TextField(
       controller: _controller,
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
+      keyboardType: TextInputType.number,
       decoration: InputDecoration(
         labelText: widget.labelValue,
         prefixIcon: Icon(widget.iconData),
@@ -403,10 +404,7 @@ class ButtonComponent extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
-            colors: [
-              Theme.of(context).colorScheme.secondary,
-              Theme.of(context).colorScheme.primary
-            ],
+            colors: [BlueStart, BlueEnd],
           ),
         ),
         child: Center(

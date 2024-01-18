@@ -1,9 +1,9 @@
 import 'package:banking_app/domain/controller/goal_controller.dart';
 import 'package:banking_app/domain/controller/home_controller.dart';
 import 'package:banking_app/ui/screens/home/sections/card_section.dart';
-import 'package:banking_app/ui/screens/home/sections/finance_section.dart';
+import 'package:banking_app/ui/screens/home/sections/financial_section.dart';
 import 'package:banking_app/ui/screens/home/sections/goals_section.dart';
-import 'package:banking_app/ui/screens/home/sections/transactions_section.dart';
+import 'package:banking_app/ui/screens/home/sections/services_section.dart';
 import 'package:banking_app/ui/screens/home/sections/wallet_section.dart';
 import 'package:banking_app/ui/screens/transaction/transaction_screen.dart';
 import 'package:flutter/material.dart';
@@ -65,12 +65,12 @@ class HomePage extends StatelessWidget {
               SizedBox(
                 width: 400,
                 height: 230,
-                child: FinanceSection(),
+                child: ServicesSection(),
               ),
               SizedBox(
                 width: 400,
                 height: 400,
-                child: TransactionsSection(),
+                child: FinancialSection(),
               ),
             ],
           ),

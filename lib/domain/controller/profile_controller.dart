@@ -22,13 +22,19 @@ class ProfileController extends ChangeNotifier {
       photo: "Carregando...",
       contact_number: "Carregando..."));
 
-  Future<void> fetchUserData() async {
-    if (dataService.userData == null) {
-      _homeRepository
-          .fetchUserData()
-          .then((value) => user.value = value.result);
-    } else {
-      user.value = dataService.userData;
+  Future<bool> fetchUserData() async {
+    try {
+      if (dataService.userData == null) {
+        _homeRepository
+            .fetchUserData()
+            .then((value) => user.value = value.result);
+        return Future.value(true);
+      } else {
+        user.value = dataService.userData;
+        return Future.value(true);
+      }
+    } catch (e) {
+      return Future.value(false);
     }
   }
 

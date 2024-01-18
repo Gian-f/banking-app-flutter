@@ -6,6 +6,8 @@ import '../../../data/di/module.dart';
 import '../../../data/model/goal.dart';
 import '../../../domain/controller/goal_controller.dart';
 import '../../../utils/util.dart';
+import '../../theme/colors.dart';
+import 'add_goal_screen.dart';
 
 enum GoalStatus { ATIVO, INATIVO, CONCLUIDO }
 
@@ -66,7 +68,7 @@ class _ListGoalScreenState extends State<ListGoalScreen> {
         return Scaffold(
           appBar: TopBarSection(
               onBackPressed: () {
-                Navigator.of(context).pop();
+                navigateFinish(context, "/home");
               },
               title: "Objetivos"),
           body: Padding(
@@ -125,7 +127,13 @@ class GoalItem extends StatelessWidget {
       padding: EdgeInsets.only(top: 5),
       child: Card(
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddGoalScreen(goal: goal)),
+            );
+          },
           borderRadius: BorderRadius.all(Radius.circular(12)),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
@@ -153,7 +161,7 @@ class GoalItem extends StatelessWidget {
                   children: [
                     LinearProgressIndicator(
                       value: progressFraction,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: BlueStart,
                       borderRadius: BorderRadius.circular(6),
                       minHeight: 20,
                     ),

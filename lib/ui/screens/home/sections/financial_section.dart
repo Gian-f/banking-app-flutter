@@ -60,8 +60,8 @@ final transactions = [
   ),
 ];
 
-class TransactionsSection extends StatelessWidget {
-  const TransactionsSection({super.key});
+class FinancialSection extends StatelessWidget {
+  const FinancialSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class TransactionsSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Transações',
+              'Movimentações',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             if (transactions.isNotEmpty)

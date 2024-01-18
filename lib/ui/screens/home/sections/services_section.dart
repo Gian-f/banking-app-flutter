@@ -25,8 +25,8 @@ final financeList = [
   ),
 ];
 
-class FinanceSection extends StatelessWidget {
-  const FinanceSection({super.key});
+class ServicesSection extends StatelessWidget {
+  const ServicesSection({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class FinanceSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              'Finanças',
+              'Serviços',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             TextButton(

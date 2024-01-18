@@ -58,4 +58,26 @@ class GoalRepositoryimpl implements GoalRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<GenericResponse> updateGoal(UpdateGoalRequest request) async {
+    final token = await dataService.storage.read(key: "access_token");
+    try {
+      var response = await http.put(goalEndpoint,
+          headers: {
+            'Content-type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: jsonEncode(request.toMap()));
+      if (response.statusCode == 200) {
+        final resp = GenericResponse.fromJson(jsonDecode(response.body));
+        return resp;
+      } else {
+        throw Exception('Falha ao editar objetivo: ${response.body}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

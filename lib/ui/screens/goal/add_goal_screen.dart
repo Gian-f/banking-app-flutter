@@ -1,17 +1,23 @@
 import 'package:banking_app/data/remote/dto/request/register_goal.dart';
 import 'package:banking_app/domain/controller/goal_controller.dart';
 import 'package:banking_app/navigation.dart';
+import 'package:banking_app/ui/widgets/app_bar.dart';
 import 'package:banking_app/utils/util.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/di/module.dart';
+import '../../../data/model/goal.dart';
 import '../../widgets/form_widgets.dart';
 import '../../widgets/widgets.dart';
 import 'list_goal_screen.dart';
 
 class AddGoalScreen extends StatefulWidget {
+  final Goal? goal; // Add an optional Goal parameter
+
+  const AddGoalScreen({super.key, this.goal});
+
   @override
   _AddGoalScreenState createState() => _AddGoalScreenState();
 }
@@ -30,11 +36,27 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   bool _isSaving = false;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.goal != null) {
+      nameController.text = widget.goal!.name;
+      currentProgressController.text =
+          formatMoney(widget.goal!.currentProgress);
+      goalNumberController.text = formatMoney(widget.goal!.goalNumber);
+      expectedDateController.text = dateFormat(widget.goal!.expected_date);
+      selectedIcon = widget.goal!.icon!;
+      selectedStatus = widget.goal!.status;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Cadastro de Objetivo'),
-      ),
+      appBar: TopBarSection(
+          onBackPressed: () {
+            Navigator.pop(context);
+          },
+          title: widget.goal == null ? "Adicionar" : "Editar"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -44,11 +66,8 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
               controller: nameController,
               labelValue: 'Nome do Objetivo',
               iconData: Icons.title,
-              onTextChanged: (text) {
-                // Lógica para tratar a mudança no texto
-              },
+              onTextChanged: (text) {},
               validator: (value) {
-                // Lógica para validação
                 return null;
               },
             ),
@@ -141,7 +160,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
             ),
             SizedBox(height: 30),
             ButtonComponent(
-                value: 'Salvar Objetivo',
+                value: widget.goal == null ? 'Salvar' : 'Editar',
                 isLoading: _isSaving,
                 onButtonClicked: () {
                   onSaveButtonClicked();
@@ -154,15 +173,10 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
   }
 
   void onSaveButtonClicked() {
-    if (nameController.text.isEmpty) {
-      showErrorDialog(context, 'O nome do objetivo não pode estar vazio');
-      return;
-    }
-
     double? currentProgress = double.tryParse(currentProgressController.text
         .replaceAll("R\$", "")
         .replaceAll(".", "")
-        .replaceAll(",", ""));
+        .replaceAll(",", "."));
     if (currentProgress == null) {
       showErrorDialog(context, 'O progresso atual deve ser um número');
       return;
@@ -171,26 +185,46 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     double? goalNumber = double.tryParse(goalNumberController.text
         .replaceAll("R\$", "")
         .replaceAll(".", "")
-        .replaceAll(",", ""));
+        .replaceAll(",", "."));
     if (goalNumber == null) {
       showErrorDialog(context, 'O número do objetivo deve ser um número');
       return;
     }
 
-    DateTime? expectedDate = dateFormatStringUtc(expectedDateController.text);
-    if (expectedDate == null) {
-      showErrorDialog(context, 'A data esperada deve ser uma data válida');
+    if (goalNumber < currentProgress) {
+      showErrorDialog(
+          context, 'O progresso atual não pode ser menor que o objetivo!');
       return;
     }
 
-    RegisterGoalRequest newGoal = RegisterGoalRequest(
-        name: nameController.text,
-        currentProgress: currentProgress,
-        goalNumber: goalNumber,
-        expectedDate: expectedDate,
-        iconName: "Icons.home",
-        status: selectedStatus.name);
-    onRegisterClicked(newGoal);
+    DateTime? expectedDate = dateFormatStringUtc(expectedDateController.text);
+    if (expectedDate == null) {
+      showErrorDialog(context, 'A data esperada deve ser uma data válida!');
+      return;
+    }
+    if (nameController.text.isEmpty) {
+      showErrorDialog(context, 'O nome do objetivo não pode estar vazio!');
+      return;
+    }
+    if (widget.goal == null) {
+      RegisterGoalRequest newGoal = RegisterGoalRequest(
+          name: nameController.text,
+          currentProgress: currentProgress,
+          goalNumber: goalNumber,
+          expectedDate: expectedDate,
+          iconName: "Icons.home",
+          status: selectedStatus.name);
+      onSaveClicked(newGoal);
+    } else {
+      UpdateGoalRequest updatedGoal = UpdateGoalRequest(
+          name: nameController.text,
+          currentProgress: currentProgress,
+          goalNumber: goalNumber,
+          expectedDate: expectedDate,
+          iconName: "Icons.home",
+          status: selectedStatus.name);
+      onSaveClicked(updatedGoal);
+    }
   }
 
   void showErrorDialog(BuildContext context, String message) {
@@ -198,7 +232,7 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Erro'),
+          title: Text('Atenção!'),
           content: Text(message),
           actions: <Widget>[
             TextButton(
@@ -230,24 +264,27 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
     }
   }
 
-  void onRegisterClicked(RegisterGoalRequest newGoal) async {
+  void onSaveClicked(dynamic newGoal) async {
     setState(() => _isSaving = true);
     try {
-      await controller.registerGoal(newGoal);
-      if (nameController.text.isEmpty ||
-          currentProgressController.text.isEmpty ||
-          goalNumberController.text.isEmpty ||
-          expectedDateController.text.isEmpty) {
-        showSnackbar(
-            context,
-            const Text(
-                "Ocorreu um erro. Por favor tente novamente mais tarde!"));
-      }
-      if (mounted) {
-        showSnackbar(context, const Text("Operação realizada com sucesso!"));
-        navigateFinish(context, "/goals");
+      if (widget.goal == null) {
+        final result = await controller.registerGoal(newGoal);
+        if (mounted && result) {
+          showSnackbar(context, const Text("Operação realizada com sucesso!"));
+          navigateFinish(context, "/goals");
+        } else {
+          showSnackbar(
+              context, const Text("Erro: Falha ao adicionar objetivo!"));
+        }
       } else {
-        showSnackbar(context, const Text("Erro: Falha ao adicionar objetivo!"));
+        final result = await controller.updateGoal(newGoal);
+        if (mounted && result) {
+          showSnackbar(context, const Text("Operação realizada com sucesso!"));
+          navigateFinish(context, "/goals");
+        } else {
+          showSnackbar(
+              context, const Text("Erro: Falha ao atualizar objetivo!"));
+        }
       }
     } catch (error) {
       if (mounted) {

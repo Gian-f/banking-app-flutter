@@ -14,9 +14,18 @@ class GoalController extends ChangeNotifier {
 
   ValueNotifier<List<Goal?>> goals = ValueNotifier<List<Goal?>>(List.empty());
 
-  Future<bool> registerGoal(RegisterGoalRequest newGoal) {
+  Future<bool> registerGoal(RegisterGoalRequest newGoal) async {
     try {
-      _goalRepository.registerGoal(newGoal);
+      await _goalRepository.registerGoal(newGoal);
+      return Future.value(true);
+    } catch (e) {
+      return Future.value(false);
+    }
+  }
+
+  Future<bool> updateGoal(UpdateGoalRequest updatedGoal) async {
+    try {
+      await _goalRepository.updateGoal(updatedGoal);
       return Future.value(true);
     } catch (e) {
       return Future.value(false);

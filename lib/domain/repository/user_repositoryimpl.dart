@@ -13,7 +13,7 @@ class UserRepositoryImpl implements UserRepository {
   final DataService dataService = getIt<DataService>();
 
   @override
-  Future<UserResponse> updateUserData(
+  Future<UpdateUserResponse> updateUserData(
       UpdateUserRequest updateUserRequest) async {
     final token = await dataService.storage.read(key: "access_token");
     try {
@@ -25,12 +25,13 @@ class UserRepositoryImpl implements UserRepository {
           },
           body: jsonEncode(updateUserRequest.toMap()));
       if (response.statusCode == 200) {
-        final resp = UserResponse.fromJson(jsonDecode(response.body));
+        final resp = UpdateUserResponse.fromJson(jsonDecode(response.body));
         return resp;
       } else {
         throw Exception('Falha ao atualizar usuário: ${response.body}');
       }
     } catch (e) {
+      print(e);
       rethrow;
     }
   }

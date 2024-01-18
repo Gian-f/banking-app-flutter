@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:banking_app/navigation.dart';
 import 'package:banking_app/ui/screens/home/home_screen.dart';
 import 'package:banking_app/ui/screens/profile/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:universal_io/io.dart';
 
 import '../../../data/di/module.dart';
@@ -25,11 +27,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final profileController = getIt<ProfileController>();
   File? _imageFile;
   bool _isSaving = false;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    profileController.fetchUserData();
+    profileController.fetchUserData().then((value) {
+      setState(() {
+        isLoading =
+            value || profileController.user.value!.isEmpty ? false : true;
+      });
+    });
+    ;
   }
 
   @override
@@ -54,131 +63,135 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: TopBarSection(
         onBackPressed: () {
-          Navigator.of(context).pop();
+          navigateFinish(context, "/home");
         },
         title: 'Perfil',
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 10),
-            InkWell(
-              borderRadius: BorderRadius.circular(50),
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20, top: 50, bottom: 10),
-                        child: Wrap(
-                          children: <Widget>[
-                            ListTile(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+      body: Skeletonizer(
+        enabled: isLoading,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 10),
+              InkWell(
+                borderRadius: BorderRadius.circular(50),
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return SafeArea(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, top: 50, bottom: 10),
+                          child: Wrap(
+                            children: <Widget>[
+                              ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                leading: const Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Icon(Icons.photo_library_outlined)),
+                                title: const Text('Galeria',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400)),
+                                onTap: () async {
+                                  await pickFromGallery(context);
+                                },
                               ),
-                              leading: const Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Icon(Icons.photo_library_outlined)),
-                              title: const Text('Galeria',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400)),
-                              onTap: () async {
-                                await pickFromGallery(context);
-                              },
-                            ),
-                            ListTile(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
+                              ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                leading: const Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Icon(Icons.photo_camera_outlined)),
+                                title: const Text('Câmera',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w400)),
+                                onTap: () async {
+                                  await pickImageFromCamera(context);
+                                },
                               ),
-                              leading: const Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Icon(Icons.photo_camera_outlined)),
-                              title: const Text('Câmera',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w400)),
-                              onTap: () async {
-                                await pickImageFromCamera(context);
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-              child: Ink(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
-                ),
-                child: SizedBox(
-                  width: 100,
-                  height: 100,
-                  child: Center(
-                    child: imageSection,
+                      );
+                    },
+                  );
+                },
+                child: Ink(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.surfaceVariant,
+                  ),
+                  child: SizedBox(
+                    width: 100,
+                    height: 100,
+                    child: Center(
+                      child: imageSection,
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            const Text("Adicione uma Foto",
-                style: TextStyle(fontWeight: FontWeight.w500)),
-            const SizedBox(height: 20),
-            MyTextFieldComponent(
-              labelValue: 'Nome Completo',
-              iconData: Icons.person_outlined,
-              initialValue: user?.name,
-              onTextChanged: (name) {
-                profileController.onEvent(FullNameChanged(name));
-              },
-              errorStatus: false,
-              validator: (rule) {},
-            ),
-            const SizedBox(height: 20),
-            MyTextFieldComponent(
-              labelValue: 'E-mail',
-              enabled: false,
-              iconData: Icons.email_outlined,
-              initialValue: user?.email,
-              onTextChanged: (string) {},
-              errorStatus: false,
-              validator: (rule) {},
-            ),
-            const SizedBox(height: 20),
-            PhoneTextFieldComponent(
-              labelValue: 'Telefone',
-              iconData: Icons.phone_android,
-              initialValue: user?.contact_number,
-              onTextChanged: (phone) {
-                profileController.onEvent(PhoneChanged(phone));
-              },
-              errorStatus: false,
-              validator: (rule) {},
-            ),
-            const SizedBox(height: 2),
-            ButtonComponent(
-                value: 'Salvar',
-                isLoading: _isSaving,
-                onButtonClicked: () {
-                  onUpdateUserClicked();
+              const SizedBox(height: 10),
+              const Text("Adicione uma Foto",
+                  style: TextStyle(fontWeight: FontWeight.w500)),
+              const SizedBox(height: 20),
+              MyTextFieldComponent(
+                labelValue: 'Nome Completo',
+                iconData: Icons.person_outlined,
+                initialValue: user?.name,
+                enabled: false,
+                onTextChanged: (name) {
+                  profileController.onEvent(FullNameChanged(name));
                 },
-                isEnabled: true),
-            const SizedBox(height: 20),
-            DeleteAccountButtonComponent(
-              isEnabled: true,
-              isLoading: false,
-              value: 'Desativar conta',
-              onButtonClicked: () {
-                onDeleteAccountClicked(context);
-              },
-            ),
-          ],
+                errorStatus: false,
+                validator: (rule) {},
+              ),
+              const SizedBox(height: 20),
+              MyTextFieldComponent(
+                labelValue: 'E-mail',
+                enabled: false,
+                iconData: Icons.email_outlined,
+                initialValue: user?.email,
+                onTextChanged: (string) {},
+                errorStatus: false,
+                validator: (rule) {},
+              ),
+              const SizedBox(height: 20),
+              PhoneTextFieldComponent(
+                labelValue: 'Telefone',
+                iconData: Icons.phone_android,
+                initialValue: user?.contact_number,
+                onTextChanged: (phone) {
+                  profileController.onEvent(PhoneChanged(phone));
+                },
+                errorStatus: false,
+                validator: (rule) {},
+              ),
+              const SizedBox(height: 2),
+              ButtonComponent(
+                  value: 'Salvar',
+                  isLoading: _isSaving,
+                  onButtonClicked: () {
+                    onUpdateUserClicked();
+                  },
+                  isEnabled: true),
+              const SizedBox(height: 20),
+              DeleteAccountButtonComponent(
+                isEnabled: true,
+                isLoading: false,
+                value: 'Desativar conta',
+                onButtonClicked: () {
+                  onDeleteAccountClicked(context);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -208,8 +221,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (!status.isGranted) {
       await Permission.camera.request();
     }
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    final pickedFile = await ImagePicker()
+        .pickImage(source: ImageSource.camera, maxHeight: 100, maxWidth: 100);
     if (pickedFile != null) {
       Navigator.pop(context);
       setState(() {
@@ -220,8 +233,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> pickFromGallery(BuildContext context) async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, maxHeight: 100, maxWidth: 100);
     if (pickedFile != null) {
       Navigator.pop(context);
       setState(() {

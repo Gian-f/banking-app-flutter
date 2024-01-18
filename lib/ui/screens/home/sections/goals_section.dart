@@ -37,12 +37,11 @@ class _GoalsSectionState extends State<GoalsSection> {
   }
 
   Future<void> fetchAllGoals() async {
-    await _controller.fetchAllGoals().then((value) => {
-          if (value)
-            {setState(() => isLoading = false)}
-          else
-            {setState(() => isLoading = true)}
-        });
+    await _controller.fetchAllGoals().then((value) {
+      setState(() {
+        isLoading = value || _controller.goals.value.isEmpty ? false : true;
+      });
+    });
   }
 
   @override
@@ -90,7 +89,7 @@ class _GoalsSectionState extends State<GoalsSection> {
                   fit: FlexFit.loose,
                   child: PageView.builder(
                     controller: pageController,
-                    itemCount: goals.take(3).length,
+                    itemCount: goals.take(5).length,
                     itemBuilder: (context, index) {
                       return GoalItem(goal: goals[index]!);
                     },
@@ -100,7 +99,7 @@ class _GoalsSectionState extends State<GoalsSection> {
                 alignment: Alignment.center,
                 height: 30,
                 child: PagerIndicator(
-                  itemCount: goals.take(3).length,
+                  itemCount: goals.take(5).length,
                   currentPage: _currentPage,
                   onPageSelected: (index) {
                     pageController.animateToPage(
