@@ -39,16 +39,17 @@ class ServicesSection extends StatelessWidget {
               'Serviços',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            TextButton(
-              onPressed: () {},
-              child: const Text("Ver mais",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white)),
-            )
+            // TextButton(
+            //   onPressed: () {},
+            //   child: const Text("Ver mais",
+            //       style: TextStyle(
+            //           fontSize: 18,
+            //           fontWeight: FontWeight.w400,
+            //           color: Colors.white)),
+            // )
           ],
         ),
+        SizedBox(height: 8),
         SizedBox(
           height: 140,
           child: ListView.builder(
