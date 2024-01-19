@@ -1,8 +1,11 @@
 import 'package:banking_app/domain/controller/goal_controller.dart';
 import 'package:banking_app/domain/controller/home_controller.dart';
-import 'package:banking_app/ui/screens/home/sections/card_section.dart';
+import 'package:banking_app/ui/screens/home/sections/benefits_section.dart';
+import 'package:banking_app/ui/screens/home/sections/budget_section.dart';
 import 'package:banking_app/ui/screens/home/sections/financial_section.dart';
 import 'package:banking_app/ui/screens/home/sections/goals_section.dart';
+import 'package:banking_app/ui/screens/home/sections/help_section.dart';
+import 'package:banking_app/ui/screens/home/sections/plan_section.dart';
 import 'package:banking_app/ui/screens/home/sections/services_section.dart';
 import 'package:banking_app/ui/screens/home/sections/wallet_section.dart';
 import 'package:banking_app/ui/screens/transaction/transaction_screen.dart';
@@ -52,10 +55,18 @@ class HomePage extends StatelessWidget {
               SizedBox(
                 width: 400,
                 height: 200,
-                child: CardsSection(),
+                child: BudgetsSection(),
               ),
               SizedBox(
                 height: 30,
+              ),
+              SizedBox(
+                width: 400,
+                height: 90,
+                child: PlanSection(),
+              ),
+              SizedBox(
+                height: 15,
               ),
               SizedBox(
                 width: 400,
@@ -63,9 +74,28 @@ class HomePage extends StatelessWidget {
                 child: GoalsSection(),
               ),
               SizedBox(
+                height: 15,
+              ),
+              SizedBox(
                 width: 400,
                 height: 230,
                 child: ServicesSection(),
+              ),
+              SizedBox(
+                width: 400,
+                height: 75,
+                child: BenefitsSection(),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              SizedBox(
+                width: 400,
+                height: 100,
+                child: HelpSection(),
+              ),
+              SizedBox(
+                height: 15,
               ),
               SizedBox(
                 width: 400,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../../../../data/model/transaction.dart';
+import '../../../../data/model/financial_movements.dart';
 import '../../../../utils/util.dart';
 
 final transactions = [
-  Transaction(
+  FinancialMovements(
     name: "Salário",
     description: "Salário fixo",
     category: "Trabalho",
@@ -13,7 +13,7 @@ final transactions = [
     price: 2000.0,
     date: DateTime.now(),
   ),
-  Transaction(
+  FinancialMovements(
     name: "Ifood",
     description: "Fast Food",
     category: "Comida",
@@ -22,7 +22,7 @@ final transactions = [
     price: 200.0,
     date: DateTime.now(),
   ),
-  Transaction(
+  FinancialMovements(
     name: "Academia",
     description: "Basquete",
     category: "Saúde",
@@ -31,7 +31,7 @@ final transactions = [
     price: 80.0,
     date: DateTime.now(),
   ),
-  Transaction(
+  FinancialMovements(
     name: "PS5",
     description: "Console",
     category: "Video Games",
@@ -40,7 +40,7 @@ final transactions = [
     price: 600.0,
     date: DateTime.now(),
   ),
-  Transaction(
+  FinancialMovements(
     name: "Academia",
     description: "Musculação",
     category: "Saúde",
@@ -49,7 +49,7 @@ final transactions = [
     price: 100.0,
     date: DateTime.now(),
   ),
-  Transaction(
+  FinancialMovements(
     name: "Taxa do lixo",
     description: "Imposto",
     category: "Gasto",
@@ -102,7 +102,7 @@ class FinancialSection extends StatelessWidget {
 }
 
 class TransactionItem extends StatelessWidget {
-  final Transaction transaction;
+  final FinancialMovements transaction;
 
   const TransactionItem({super.key, required this.transaction});
 

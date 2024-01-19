@@ -45,15 +45,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final profileController = getIt<ProfileController>();
     final user = profileController.user.value;
+    final userPhoto = user!.profile_image;
+    Uint8List bytes = base64Decode(userPhoto.toString());
 
-    Widget imageSection = _imageFile == null
+    Widget imageSection = userPhoto == null
         ? const Icon(
             Icons.camera_alt_outlined,
             color: Colors.white,
           )
         : ClipOval(
-            child: Image.file(
-              _imageFile!,
+            child: Image.memory(
+              bytes,
               fit: BoxFit.cover,
               width: 100.0,
               height: 100.0,
@@ -144,34 +146,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
               MyTextFieldComponent(
                 labelValue: 'Nome Completo',
                 iconData: Icons.person_outlined,
-                initialValue: user?.name,
+                initialValue: user.name,
                 enabled: false,
                 onTextChanged: (name) {
                   profileController.onEvent(FullNameChanged(name));
                 },
                 errorStatus: false,
-                validator: (rule) {},
+                validator: (rule) {
+                  return null;
+                },
               ),
               const SizedBox(height: 20),
               MyTextFieldComponent(
                 labelValue: 'E-mail',
                 enabled: false,
                 iconData: Icons.email_outlined,
-                initialValue: user?.email,
+                initialValue: user.email,
                 onTextChanged: (string) {},
                 errorStatus: false,
-                validator: (rule) {},
+                validator: (rule) {
+                  return null;
+                },
               ),
               const SizedBox(height: 20),
               PhoneTextFieldComponent(
                 labelValue: 'Telefone',
                 iconData: Icons.phone_android,
-                initialValue: user?.contact_number,
+                initialValue: user.contact_number,
                 onTextChanged: (phone) {
                   profileController.onEvent(PhoneChanged(phone));
                 },
                 errorStatus: false,
-                validator: (rule) {},
+                validator: (rule) {
+                  return null;
+                },
               ),
               const SizedBox(height: 2),
               ButtonComponent(

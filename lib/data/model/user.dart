@@ -1,13 +1,13 @@
 class User {
   late final String name;
   final String email;
-  String? photo;
+  String? profile_image;
   late final String contact_number;
 
   User({
     required this.name,
     required this.email,
-    required this.photo,
+    required this.profile_image,
     required this.contact_number,
   });
 
@@ -21,7 +21,7 @@ class User {
       name: json['name'],
       email: json['email'],
       contact_number: json['contact_number'],
-      photo: json['photo'],
+      profile_image: json['profile_image'],
     );
   }
 }

@@ -47,6 +47,8 @@ dependencies:
   dropdown_search: ^5.0.6
   extended_masked_text: ^2.3.1
   skeletonizer: ^1.0.1
+  fl_chart: ^0.66.0
+
 
 
 

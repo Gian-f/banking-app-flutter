@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:banking_app/domain/controller/home_controller.dart';
 import 'package:banking_app/navigation.dart';
 import 'package:banking_app/ui/widgets/widgets.dart';
@@ -38,6 +41,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
 
   @override
   Widget build(BuildContext context) {
+    final userPhoto = homeController.user.value!.profile_image;
+    Uint8List bytes = base64Decode(userPhoto.toString());
     return ValueListenableBuilder<User?>(
       valueListenable: homeController.user,
       builder: (context, user, _) {
@@ -57,9 +62,23 @@ class _HomeAppBarState extends State<HomeAppBar> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  customIconButton(50, () {
-                    navigate(context, "/profile");
-                  }, Icons.person, size: 30, context)
+                  homeController.user.value!.profile_image == null
+                      ? customIconButton(50, () {
+                          navigate(context, "/profile");
+                        }, Icons.person, size: 30, context)
+                      : InkWell(
+                          onTap: () {
+                            navigate(context, "/profile");
+                          },
+                          child: ClipOval(
+                            child: Image.memory(
+                              bytes,
+                              fit: BoxFit.cover,
+                              width: 48.0,
+                              height: 48.0,
+                            ),
+                          ),
+                        )
                 ],
               ),
             ),

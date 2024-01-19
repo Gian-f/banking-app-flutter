@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-class Transaction {
+class FinancialMovements {
   final String name;
   final String description;
   final String category;
@@ -9,7 +9,7 @@ class Transaction {
   final double price;
   final DateTime date;
 
-  Transaction({
+  FinancialMovements({
     required this.name,
     required this.description,
     required this.category,
@@ -20,13 +20,4 @@ class Transaction {
   });
 }
 
-class TransactionType {
-  final String type;
-
-  const TransactionType._(this.type);
-
-  static const entrada = TransactionType._('entrada');
-  static const saida = TransactionType._('saida');
-
-  static const values = [entrada, saida];
-}
+enum TransactionType { entrada, saida }

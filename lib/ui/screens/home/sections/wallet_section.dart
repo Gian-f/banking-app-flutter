@@ -17,7 +17,9 @@ class _WalletSectionState extends State<WalletSection> {
       enabled: false,
       child: Padding(
           padding: const EdgeInsets.only(top: 30),
-          child: Column(
+          child: IntrinsicHeight(
+              // Wrap with IntrinsicHeight
+              child: Column(
             children: [
               Row(
                 children: [
@@ -34,6 +36,7 @@ class _WalletSectionState extends State<WalletSection> {
                 ],
               ),
               Row(
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   const Text("R\$",
                       style:
@@ -46,13 +49,17 @@ class _WalletSectionState extends State<WalletSection> {
                         style: TextStyle(
                             fontSize: 26, fontWeight: FontWeight.bold))
                   else
-                    const Text("****",
-                        style: TextStyle(
-                            fontSize: 26, fontWeight: FontWeight.bold))
+                    Container(
+                      height: 10,
+                      width: 180,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
                 ],
               )
             ],
-          )),
+          ))),
     );
   }
 }

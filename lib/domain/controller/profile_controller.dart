@@ -19,7 +19,7 @@ class ProfileController extends ChangeNotifier {
   ValueNotifier<User?> user = ValueNotifier<User?>(User(
       name: "Carregando...",
       email: "Carregando...",
-      photo: "Carregando...",
+      profile_image: "",
       contact_number: "Carregando..."));
 
   Future<bool> fetchUserData() async {
@@ -47,13 +47,13 @@ class ProfileController extends ChangeNotifier {
         user.value?.contact_number = (event as PhoneChanged).phone;
         break;
       case PhotoChanged:
-        user.value?.photo = (event as PhotoChanged).photo;
+        user.value?.profile_image = (event as PhotoChanged).photo;
         break;
       case UpdateUserButtonClicked:
         final updatedUser = UpdateUserRequest(
             name: user.value!.name,
             contactNumber: user.value!.contact_number,
-            photo: user.value!.photo!);
+            photo: user.value!.profile_image!);
         return await _updateUserData(updatedUser);
       default:
         throw UnsupportedError('Unsupported event: $event');

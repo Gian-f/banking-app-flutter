@@ -15,7 +15,7 @@ class HomeController extends ChangeNotifier {
   ValueNotifier<User?> user = ValueNotifier<User?>(User(
       name: "Carregando...",
       email: "Carregando...",
-      photo: "Carregando...",
+      profile_image: "",
       contact_number: "Carregando..."));
 
   Future<bool> fetchUserData() async {
