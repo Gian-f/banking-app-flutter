@@ -9,16 +9,15 @@ class WalletSection extends StatefulWidget {
 }
 
 class _WalletSectionState extends State<WalletSection> {
-  bool isTotalVisible = true;
+  bool isTotalVisible = false;
 
   @override
   Widget build(BuildContext context) {
     return Skeletonizer(
       enabled: false,
       child: Padding(
-          padding: const EdgeInsets.only(top: 30),
+          padding: const EdgeInsets.only(top: 15),
           child: IntrinsicHeight(
-              // Wrap with IntrinsicHeight
               child: Column(
             children: [
               Row(
@@ -53,8 +52,9 @@ class _WalletSectionState extends State<WalletSection> {
                       height: 10,
                       width: 180,
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                 ],
               )

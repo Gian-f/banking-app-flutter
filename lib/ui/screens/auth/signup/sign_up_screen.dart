@@ -75,7 +75,7 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 CheckboxComponent(
                   value:
-                      'Ao continuar, você aceita nossa \n Política de Privacidade e Termos de Uso',
+                      'Ao continuar, você aceita nossa \n Política de Privacidade e \n Termos de Uso',
                   onCheckedChange: (value) {
                     signUpController
                         .onEvent(PrivacyPolicyCheckBoxClicked(value));

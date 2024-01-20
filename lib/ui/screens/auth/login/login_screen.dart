@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isAuthenticating = false;
       });
-    } on PlatformException catch (e) {
+    } on PlatformException {
       setState(() {
         _isAuthenticating = false;
       });
@@ -90,23 +90,21 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(28.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(28.0),
+        child: Center(
+          child: ListView(
+            shrinkWrap: true,
             children: <Widget>[
               const HeadingTextComponent(value: 'Entrar'),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               MyTextFieldComponent(
                 labelValue: 'E-mail',
                 iconData: Icons.person_outline,
                 onTextChanged: (value) {
                   widget.loginController.onEvent(EmailChanged(value));
                 },
-                validator: (value) {
-                  return isEmailValid(value);
-                },
+                validator: (value) => isEmailValid(value),
               ),
               const SizedBox(height: 20),
               PasswordTextFieldComponent(
@@ -115,11 +113,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTextSelected: (value) {
                   widget.loginController.onEvent(PasswordChanged(value));
                 },
-                validator: (value) {
-                  return isPasswordValid(value);
-                },
+                validator: (value) => isPasswordValid(value),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               ButtonComponent(
                 isEnabled: true,
                 isLoading: _loginIsLoading,
@@ -148,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   _authenticateWithBiometrics();
                 },
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 20),
               ClickableLoginTextComponent(
                 tryingToLogin: false,
                 onTextSelected: (string) {

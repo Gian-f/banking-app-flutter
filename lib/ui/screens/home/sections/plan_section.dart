@@ -20,40 +20,46 @@ class _PlanSectionState extends State<PlanSection> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Card(
       child: Skeletonizer(
         enabled: false,
         child: Column(children: [
           ListTile(
-            title: Text(
-              "Assine o premium",
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
+            title: Expanded(
+              child: Text(
+                "Assine o premium",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                ),
               ),
             ),
-            subtitle: Row(children: [
-              Text(
-                "$planValue ",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            subtitle: Expanded(
+              // Wrap Row with Expanded
+              child: Row(children: [
+                Text(
+                  "$planValue ",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Text(
-                "/mensal",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w400,
+                Text(
+                  "/mensal",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
-              ),
-            ]),
+              ]),
+            ),
             trailing: TextButton(
               onPressed: () {},
               child: Text(
                 "Escolha o plano",
-                style: TextStyle(color: BlueEnd, fontSize: 16),
+                style: TextStyle(color: BlueEnd, fontSize: 14),
               ),
             ),
           ),

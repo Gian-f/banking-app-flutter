@@ -89,7 +89,7 @@ class _GoalsSectionState extends State<GoalsSection> {
                   fit: FlexFit.loose,
                   child: PageView.builder(
                     controller: pageController,
-                    itemCount: goals.take(5).length,
+                    itemCount: goals.reversed.take(3).length,
                     itemBuilder: (context, index) {
                       return GoalItem(goal: goals[index]!);
                     },
@@ -99,7 +99,7 @@ class _GoalsSectionState extends State<GoalsSection> {
                 alignment: Alignment.center,
                 height: 30,
                 child: PagerIndicator(
-                  itemCount: goals.take(5).length,
+                  itemCount: goals.reversed.take(3).length,
                   currentPage: _currentPage,
                   onPageSelected: (index) {
                     pageController.animateToPage(

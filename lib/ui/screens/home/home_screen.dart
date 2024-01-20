@@ -14,6 +14,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../data/di/module.dart';
+import '../../../data/model/goal.dart';
 import '../../../navigation.dart';
 import '../../widgets/app_bar.dart';
 import '../profile/profile_screen.dart';
@@ -33,8 +34,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: PopScope(
         canPop: false,
         onPopInvoked: (didPop) async {
@@ -46,60 +49,56 @@ class HomePage extends StatelessWidget {
         child: Scaffold(
           appBar: HomeAppBar(),
           body: ListView(
-            children: const [
-              SizedBox(
-                width: 400,
-                height: 115,
+            children: [
+              Container(
+                width: screenWidth,
+                height: screenWidth * 0.32,
                 child: WalletSection(),
               ),
-              SizedBox(
-                width: 400,
-                height: 200,
+              Container(
+                width: screenWidth,
+                height: screenWidth * 0.5,
                 child: BudgetsSection(),
               ),
-              SizedBox(
-                height: 30,
-              ),
-              SizedBox(
-                width: 400,
-                height: 90,
+              SizedBox(height: 30),
+              Container(
+                width: screenWidth,
+                height: screenWidth * 0.25,
                 child: PlanSection(),
               ),
-              SizedBox(
-                height: 15,
+              SizedBox(height: 15),
+              ValueListenableBuilder<List<Goal?>>(
+                valueListenable: goalsController.goals,
+                builder: (context, builder, _) {
+                  return Container(
+                    width: screenWidth,
+                    height: goalsController.goals.value.isEmpty
+                        ? screenWidth
+                        : screenWidth * 0.8 + 8,
+                    child: GoalsSection(),
+                  );
+                },
               ),
-              SizedBox(
-                width: 400,
-                height: 300,
-                child: GoalsSection(),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                width: 400,
-                height: 230,
+              Container(
+                width: screenWidth,
+                height: screenWidth * 0.60, // Ajuste proporcional
                 child: ServicesSection(),
               ),
-              SizedBox(
-                width: 400,
-                height: 75,
+              Container(
+                width: screenWidth,
+                height: screenWidth * 0.17, // Ajuste proporcional
                 child: BenefitsSection(),
               ),
-              SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                width: 400,
-                height: 100,
+              SizedBox(height: 15),
+              Container(
+                width: screenWidth,
+                height: screenWidth * 0.22, // Ajuste proporcional
                 child: HelpSection(),
               ),
-              SizedBox(
-                height: 15,
-              ),
-              SizedBox(
-                width: 400,
-                height: 400,
+              SizedBox(height: 15),
+              Container(
+                width: screenWidth,
+                height: screenWidth * 1.8, // Ajuste proporcional
                 child: FinancialSection(),
               ),
             ],

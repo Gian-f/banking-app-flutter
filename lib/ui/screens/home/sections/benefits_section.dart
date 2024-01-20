@@ -32,8 +32,10 @@ class _BenefitsSectionState extends State<BenefitsSection> {
                     SizedBox(width: 8),
                     Text("Seus benefícios",
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold)),
-                    Chip(label: Text("Cliente Premium")),
+                            fontSize: 14, fontWeight: FontWeight.bold)),
+                    Chip(
+                        label: Text("Cliente Premium"),
+                        labelPadding: EdgeInsets.all(2)),
                     IconButton(
                         onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
                   ])),

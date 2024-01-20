@@ -85,26 +85,26 @@ class FinancialSection extends StatelessWidget {
               )
           ],
         ),
+        SizedBox(height: 12),
         if (transactions.isEmpty)
           const EmptyTransactionState()
         else
-          Expanded(
-            child: ListView.builder(
-              itemCount: transactions.length,
-              itemBuilder: (context, index) {
-                return TransactionItem(transaction: transactions[index]);
-              },
-            ),
+          Column(
+            children: transactions.reversed
+                .take(5)
+                .map((transaction) =>
+                    FinancialMovementItem(movement: transaction))
+                .toList(),
           ),
       ],
     );
   }
 }
 
-class TransactionItem extends StatelessWidget {
-  final FinancialMovements transaction;
+class FinancialMovementItem extends StatelessWidget {
+  final FinancialMovements movement;
 
-  const TransactionItem({super.key, required this.transaction});
+  const FinancialMovementItem({super.key, required this.movement});
 
   @override
   Widget build(BuildContext context) {
@@ -115,17 +115,17 @@ class TransactionItem extends StatelessWidget {
         onTap: () {},
         borderRadius: BorderRadius.circular(10),
         child: ListTile(
-          leading: Icon(transaction.icon),
-          title: Text(transaction.name,
+          leading: Icon(movement.icon),
+          title: Text(movement.name,
               style:
                   const TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(transaction.description,
+              Text(movement.description,
                   style: const TextStyle(
                       fontWeight: FontWeight.w300, fontSize: 17)),
-              Text(transaction.category,
+              Text(movement.category,
                   style: const TextStyle(
                       fontWeight: FontWeight.w300, fontSize: 14)),
             ],
@@ -135,16 +135,16 @@ class TransactionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                transaction.type == TransactionType.entrada
-                    ? "+ ${formatMoney(transaction.price)}"
-                    : "- ${formatMoney(transaction.price)}",
-                style: transaction.type == TransactionType.entrada
+                movement.type == TransactionType.entrada
+                    ? "+ ${formatMoney(movement.price)}"
+                    : "- ${formatMoney(movement.price)}",
+                style: movement.type == TransactionType.entrada
                     ? const TextStyle(fontSize: 17, color: Colors.green)
                     : const TextStyle(fontSize: 17, color: Colors.red),
               ),
               const SizedBox(height: 9),
               Text(
-                formatDateAgo(transaction.date),
+                formatDateAgo(movement.date),
                 style: const TextStyle(fontSize: 15),
               ),
             ],

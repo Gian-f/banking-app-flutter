@@ -57,8 +57,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Image.memory(
               bytes,
               fit: BoxFit.cover,
-              width: 100.0,
-              height: 100.0,
+              width: 0.3 * MediaQuery.of(context).size.width,
+              height: 0.3 * MediaQuery.of(context).size.width,
             ),
           );
 
@@ -71,134 +71,138 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Skeletonizer(
         enabled: isLoading,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Column(
-            children: <Widget>[
-              const SizedBox(height: 10),
-              InkWell(
-                borderRadius: BorderRadius.circular(50),
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return SafeArea(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, top: 50, bottom: 10),
-                          child: Wrap(
-                            children: <Widget>[
-                              ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                InkWell(
+                  borderRadius: BorderRadius.circular(50),
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return SafeArea(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, top: 50, bottom: 10),
+                            child: Wrap(
+                              children: <Widget>[
+                                ListTile(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  leading: const Padding(
+                                      padding: EdgeInsets.only(right: 10),
+                                      child:
+                                          Icon(Icons.photo_library_outlined)),
+                                  title: const Text('Galeria',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w400)),
+                                  onTap: () async {
+                                    await pickFromGallery(context);
+                                  },
                                 ),
-                                leading: const Padding(
-                                    padding: EdgeInsets.only(right: 10),
-                                    child: Icon(Icons.photo_library_outlined)),
-                                title: const Text('Galeria',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400)),
-                                onTap: () async {
-                                  await pickFromGallery(context);
-                                },
-                              ),
-                              ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                ListTile(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  leading: const Padding(
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Icon(Icons.photo_camera_outlined)),
+                                  title: const Text('Câmera',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w400)),
+                                  onTap: () async {
+                                    await pickImageFromCamera(context);
+                                  },
                                 ),
-                                leading: const Padding(
-                                    padding: EdgeInsets.only(right: 10),
-                                    child: Icon(Icons.photo_camera_outlined)),
-                                title: const Text('Câmera',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w400)),
-                                onTap: () async {
-                                  await pickImageFromCamera(context);
-                                },
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: Ink(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.surfaceVariant,
-                  ),
-                  child: SizedBox(
-                    width: 100,
-                    height: 100,
-                    child: Center(
-                      child: imageSection,
+                        );
+                      },
+                    );
+                  },
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                    ),
+                    child: SizedBox(
+                      width: 0.3 * MediaQuery.of(context).size.width,
+                      height: 0.3 * MediaQuery.of(context).size.width,
+                      child: Center(
+                        child: imageSection,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              const Text("Adicione uma Foto",
-                  style: TextStyle(fontWeight: FontWeight.w500)),
-              const SizedBox(height: 20),
-              MyTextFieldComponent(
-                labelValue: 'Nome Completo',
-                iconData: Icons.person_outlined,
-                initialValue: user.name,
-                enabled: false,
-                onTextChanged: (name) {
-                  profileController.onEvent(FullNameChanged(name));
-                },
-                errorStatus: false,
-                validator: (rule) {
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              MyTextFieldComponent(
-                labelValue: 'E-mail',
-                enabled: false,
-                iconData: Icons.email_outlined,
-                initialValue: user.email,
-                onTextChanged: (string) {},
-                errorStatus: false,
-                validator: (rule) {
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              PhoneTextFieldComponent(
-                labelValue: 'Telefone',
-                iconData: Icons.phone_android,
-                initialValue: user.contact_number,
-                onTextChanged: (phone) {
-                  profileController.onEvent(PhoneChanged(phone));
-                },
-                errorStatus: false,
-                validator: (rule) {
-                  return null;
-                },
-              ),
-              const SizedBox(height: 2),
-              ButtonComponent(
+                const SizedBox(height: 10),
+                const Text("Adicione uma Foto",
+                    style: TextStyle(fontWeight: FontWeight.w500)),
+                const SizedBox(height: 10),
+                MyTextFieldComponent(
+                  labelValue: 'Nome Completo',
+                  iconData: Icons.person_outlined,
+                  initialValue: user.name,
+                  enabled: false,
+                  onTextChanged: (name) {
+                    profileController.onEvent(FullNameChanged(name));
+                  },
+                  errorStatus: false,
+                  validator: (rule) {
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                MyTextFieldComponent(
+                  labelValue: 'E-mail',
+                  enabled: false,
+                  iconData: Icons.email_outlined,
+                  initialValue: user.email,
+                  onTextChanged: (string) {},
+                  errorStatus: false,
+                  validator: (rule) {
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 15),
+                PhoneTextFieldComponent(
+                  labelValue: 'Telefone',
+                  iconData: Icons.phone_android,
+                  initialValue: user.contact_number,
+                  onTextChanged: (phone) {
+                    profileController.onEvent(PhoneChanged(phone));
+                  },
+                  errorStatus: false,
+                  validator: (rule) {
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                ButtonComponent(
                   value: 'Salvar',
                   isLoading: _isSaving,
                   onButtonClicked: () {
                     onUpdateUserClicked();
                   },
-                  isEnabled: true),
-              const SizedBox(height: 20),
-              DeleteAccountButtonComponent(
-                isEnabled: true,
-                isLoading: false,
-                value: 'Desativar conta',
-                onButtonClicked: () {
-                  onDeleteAccountClicked(context);
-                },
-              ),
-            ],
+                  isEnabled: true,
+                ),
+                const SizedBox(height: 20),
+                DeleteAccountButtonComponent(
+                  isEnabled: true,
+                  isLoading: false,
+                  value: 'Desativar conta',
+                  onButtonClicked: () {
+                    onDeleteAccountClicked(context);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -202,25 +202,23 @@ class EmptyGoalsState extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Center(
+    return Padding(
+      padding: EdgeInsets.only(top: 5),
       child: Card(
-        margin: const EdgeInsets.all(32.0),
-        color: theme.colorScheme.surface,
         child: InkWell(
           onTap: () {
             navigate(context, "/goals/add");
           },
           borderRadius: BorderRadius.all(Radius.circular(12)),
           child: Padding(
-            padding: const EdgeInsets.all(28.0),
+            padding: const EdgeInsets.all(12.0),
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 CircleAvatar(
-                  radius: 30.0,
-                  backgroundColor: theme.colorScheme.surfaceVariant,
-                  child: const Icon(Icons.add, color: Colors.white, size: 40.0),
+                  backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+                  child: Icon(Icons.add, color: Colors.white),
                 ),
                 const SizedBox(height: 12),
                 Text(

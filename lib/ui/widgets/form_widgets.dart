@@ -239,6 +239,7 @@ class _PhoneTextFieldComponentState extends State<PhoneTextFieldComponent> {
       inputDecoration: InputDecoration(
         labelText: widget.labelValue,
         prefixIcon: Icon(widget.iconData),
+        counterText: "",
         filled: true,
         fillColor: Theme.of(context).colorScheme.surfaceVariant,
         border: UnderlineInputBorder(
@@ -591,7 +592,7 @@ class BiometricOptionComponent extends StatelessWidget {
                 SizedBox(height: 10),
                 Icon(Icons.fingerprint_sharp, size: 35),
                 SizedBox(height: 10),
-                Text("Entre utilizando sua impressão digital",
+                Text("Entre utilizando \nsua impressão digital",
                     style: TextStyle(fontSize: 15), textAlign: TextAlign.center)
               ],
             )),
@@ -626,7 +627,7 @@ class ClickableTextComponent extends StatelessWidget {
               ..onTap = () => onTextSelected('Política de privacidade'),
           ),
           const TextSpan(
-            text: ' e ',
+            text: ' e \n',
           ),
           TextSpan(
             text: 'Termos de uso',
