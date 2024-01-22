@@ -49,15 +49,6 @@ final transactions = [
     price: 100.0,
     date: DateTime.now(),
   ),
-  FinancialMovements(
-    name: "Taxa do lixo",
-    description: "Imposto",
-    category: "Gasto",
-    type: TransactionType.saida,
-    icon: Icons.cleaning_services,
-    price: 100.0,
-    date: DateTime.now(),
-  ),
 ];
 
 class FinancialSection extends StatelessWidget {
@@ -91,7 +82,7 @@ class FinancialSection extends StatelessWidget {
         else
           Column(
             children: transactions.reversed
-                .take(5)
+                .take(4)
                 .map((transaction) =>
                     FinancialMovementItem(movement: transaction))
                 .toList(),
@@ -110,7 +101,6 @@ class FinancialMovementItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
-      color: Theme.of(context).colorScheme.surfaceVariant,
       child: InkWell(
         onTap: () {},
         borderRadius: BorderRadius.circular(10),

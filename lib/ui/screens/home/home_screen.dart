@@ -52,8 +52,13 @@ class HomePage extends StatelessWidget {
             children: [
               Container(
                 width: screenWidth,
-                height: screenWidth * 0.32,
+                height: screenWidth * 0.30,
                 child: WalletSection(),
+              ),
+              Container(
+                width: screenWidth,
+                height: screenWidth * 0.40,
+                child: ServicesSection(),
               ),
               Container(
                 width: screenWidth,
@@ -63,7 +68,7 @@ class HomePage extends StatelessWidget {
               SizedBox(height: 30),
               Container(
                 width: screenWidth,
-                height: screenWidth * 0.25,
+                height: screenWidth * 0.22,
                 child: PlanSection(),
               ),
               SizedBox(height: 15),
@@ -74,31 +79,26 @@ class HomePage extends StatelessWidget {
                     width: screenWidth,
                     height: goalsController.goals.value.isEmpty
                         ? screenWidth
-                        : screenWidth * 0.8 + 8,
+                        : screenWidth * 0.7,
                     child: GoalsSection(),
                   );
                 },
               ),
               Container(
                 width: screenWidth,
-                height: screenWidth * 0.60, // Ajuste proporcional
-                child: ServicesSection(),
-              ),
-              Container(
-                width: screenWidth,
-                height: screenWidth * 0.17, // Ajuste proporcional
+                height: screenWidth * 0.17,
                 child: BenefitsSection(),
               ),
               SizedBox(height: 15),
               Container(
                 width: screenWidth,
-                height: screenWidth * 0.22, // Ajuste proporcional
+                height: screenWidth * 0.22,
                 child: HelpSection(),
               ),
               SizedBox(height: 15),
               Container(
                 width: screenWidth,
-                height: screenWidth * 1.8, // Ajuste proporcional
+                height: screenWidth * 1.2,
                 child: FinancialSection(),
               ),
             ],

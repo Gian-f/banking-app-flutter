@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/colors.dart';
+
 class PagerIndicator extends StatelessWidget {
   final int itemCount;
   final int currentPage;
@@ -29,8 +31,7 @@ class PagerIndicator extends StatelessWidget {
               width: 7,
               height: 7,
               decoration: BoxDecoration(
-                color:
-                    index == currentPage ? Colors.deepPurple[200] : Colors.grey,
+                color: index == currentPage ? BlueStart : Colors.grey,
                 shape: BoxShape.circle,
               ),
             ),

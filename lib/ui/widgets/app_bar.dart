@@ -5,7 +5,6 @@ import 'package:banking_app/domain/controller/home_controller.dart';
 import 'package:banking_app/navigation.dart';
 import 'package:banking_app/ui/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../data/di/module.dart';
 import '../../data/model/user.dart';
@@ -46,64 +45,61 @@ class _HomeAppBarState extends State<HomeAppBar> {
     return ValueListenableBuilder<User?>(
       valueListenable: homeController.user,
       builder: (context, user, _) {
-        return Skeletonizer(
-          enabled: isLoading,
-          child: AppBar(
-            elevation: 0,
-            backgroundColor: Theme.of(context).colorScheme.background,
-            surfaceTintColor: Theme.of(context).colorScheme.background,
-            centerTitle: false,
-            title: Text(
-              "Olá,\n${user?.name}",
-              style: const TextStyle(fontSize: 18),
-            ),
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  homeController.user.value!.profile_image == null
-                      ? customIconButton(50, () {
-                          navigate(context, "/profile");
-                        }, Icons.person, size: 30, context)
-                      : InkWell(
-                          onTap: () {
-                            navigate(context, "/profile");
-                          },
-                          child: ClipOval(
-                            child: Image.memory(
-                              bytes,
-                              fit: BoxFit.cover,
-                              width: 48.0,
-                              height: 48.0,
-                            ),
-                          ),
-                        )
-                ],
-              ),
-            ),
-            actions: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Row(
-                      children: [
-                        // customIconButton(15, () {
-                        //   showSnackbar(context, const Text("Search"));
-                        // }, Icons.search, context),
-                        Container(width: 12),
-                        customIconButton(15, () {
-                          showSnackbar(context, const Text("Not"));
-                        }, Icons.notifications, context),
-                        Container(width: 12)
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            ],
+        return AppBar(
+          elevation: 0,
+          backgroundColor: Theme.of(context).colorScheme.background,
+          surfaceTintColor: Theme.of(context).colorScheme.background,
+          centerTitle: false,
+          title: Text(
+            "Olá,\n${user?.name}",
+            style: const TextStyle(fontSize: 18),
           ),
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                homeController.user.value!.profile_image == null
+                    ? customIconButton(50, () {
+                        navigate(context, "/profile");
+                      }, Icons.person, size: 30, context)
+                    : InkWell(
+                        onTap: () {
+                          navigate(context, "/profile");
+                        },
+                        child: ClipOval(
+                          child: Image.memory(
+                            bytes,
+                            fit: BoxFit.cover,
+                            width: 48.0,
+                            height: 48.0,
+                          ),
+                        ),
+                      )
+              ],
+            ),
+          ),
+          actions: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Row(
+                    children: [
+                      // customIconButton(15, () {
+                      //   showSnackbar(context, const Text("Search"));
+                      // }, Icons.search, context),
+                      Container(width: 12),
+                      customIconButton(15, () {
+                        showSnackbar(context, const Text("Not"));
+                      }, Icons.notifications, context),
+                      Container(width: 12)
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
         );
       },
     );

@@ -35,10 +35,10 @@ class ServicesSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Serviços',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+            // const Text(
+            //   'Serviços',
+            //   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            // ),
             // TextButton(
             //   onPressed: () {},
             //   child: const Text("Ver mais",

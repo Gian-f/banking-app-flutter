@@ -31,9 +31,7 @@ void showSnackbar(BuildContext context, Widget content, {String label = "Ok"}) {
     content: content,
     action: SnackBarAction(
       label: label,
-      onPressed: () {
-        // Some code to undo the change.
-      },
+      onPressed: () {},
     ),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);

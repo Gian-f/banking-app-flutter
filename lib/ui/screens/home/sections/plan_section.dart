@@ -25,19 +25,18 @@ class _PlanSectionState extends State<PlanSection> {
     return Card(
       child: Skeletonizer(
         enabled: false,
-        child: Column(children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           ListTile(
             title: Expanded(
               child: Text(
                 "Assine o premium",
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
-                  fontSize: 12,
+                  fontSize: 14,
                 ),
               ),
             ),
             subtitle: Expanded(
-              // Wrap Row with Expanded
               child: Row(children: [
                 Text(
                   "$planValue ",
