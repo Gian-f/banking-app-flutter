@@ -26,6 +26,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final profileController = getIt<ProfileController>();
   File? _imageFile;
+  Uint8List? _tempImage;
   bool _isSaving = false;
   bool isLoading = false;
 
@@ -78,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 InkWell(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(70),
                   onTap: () {
                     showModalBottomSheet(
                       context: context,
@@ -213,6 +214,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() => _isSaving = true);
     try {
       await profileController.onEvent(UpdateUserButtonClicked());
+      if (_tempImage != null) {
+        _imageFile = File.fromRawPath(_tempImage!);
+      }
       if (mounted) {
         showSnackbar(context, const Text("Operação realizada com sucesso!"));
       } else {
@@ -259,6 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<String> _updateImageBase64(File imageFile) async {
     Uint8List imageBytes = await imageFile.readAsBytes();
     String base64Image = base64Encode(imageBytes);
+    _tempImage = imageBytes;
     profileController.onEvent(PhotoChanged(base64Image));
     return base64Image;
   }

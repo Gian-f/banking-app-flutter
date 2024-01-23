@@ -19,6 +19,19 @@ List<Budget> getBudgets() {
           iconName: Icons.airplane_ticket_sharp,
           allocatedAmount: 1000),
     ),
+    Budget(
+      id: 2,
+      name: 'Custos Mensais',
+      initialAmount: 1500,
+      currentAmount: 700,
+      startDate: DateTime.now(),
+      endDate: DateTime.now().add(Duration(days: 30)),
+      category: Category(
+          id: 1,
+          name: "name",
+          iconName: Icons.airplane_ticket_sharp,
+          allocatedAmount: 1000),
+    ),
   ];
 }
 

@@ -683,3 +683,47 @@ class _CheckboxComponentState extends State<CheckboxComponent> {
     );
   }
 }
+
+class MyIconPickerComponent extends StatefulWidget {
+  final String labelValue;
+  final List<IconData> icons;
+  final Function(IconData) onIconSelected;
+  final bool enabled;
+
+  const MyIconPickerComponent({
+    required this.labelValue,
+    required this.icons,
+    required this.onIconSelected,
+    this.enabled = true,
+  });
+
+  @override
+  _MyIconPickerComponentState createState() => _MyIconPickerComponentState();
+}
+
+class _MyIconPickerComponentState extends State<MyIconPickerComponent> {
+  IconData? _selectedIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<IconData>(
+      value: _selectedIcon,
+      hint: Text(widget.labelValue),
+      icon: Icon(Icons.arrow_drop_down),
+      items: widget.icons.map((IconData icon) {
+        return DropdownMenuItem<IconData>(
+          value: icon,
+          child: Icon(icon),
+        );
+      }).toList(),
+      onChanged: widget.enabled
+          ? (IconData? newValue) {
+              setState(() {
+                _selectedIcon = newValue;
+              });
+              widget.onIconSelected(newValue!);
+            }
+          : null,
+    );
+  }
+}

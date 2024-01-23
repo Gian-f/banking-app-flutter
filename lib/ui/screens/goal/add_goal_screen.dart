@@ -56,12 +56,18 @@ class _AddGoalScreenState extends State<AddGoalScreen> {
           onBackPressed: () {
             Navigator.pop(context);
           },
-          title: widget.goal == null ? "Adicionar" : "Editar"),
+          title:
+              widget.goal == null ? "Adicionar Objetivo" : "Editar Objetivo"),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text("Qual é a razão por trás da sua decisão de economizar?",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
+            SizedBox(
+              height: 20,
+            ),
             MyTextFieldComponent(
               controller: nameController,
               labelValue: 'Nome do Objetivo',
